@@ -1,0 +1,21 @@
+/* Display the supplied artwork at readable sizes without changing the image. */
+.main-header{height:auto;min-height:130px;grid-template-columns:320px minmax(160px,1fr) 225px;gap:24px}
+.logo-wrap.brand-logo{display:flex;align-items:center;gap:8px;width:320px;max-width:100%;min-width:0;text-decoration:none;background:#fcf9f2;border-radius:6px;padding:4px;box-sizing:border-box}
+.brand-emblem,.brand-wordmark{display:block;position:relative;overflow:hidden;flex-shrink:0}
+.brand-emblem{width:96px;height:96px}
+.brand-wordmark{width:208px;height:62px}
+.logo-wrap.brand-logo img{position:absolute;width:180px;height:180px;max-width:none;max-height:none;object-fit:fill;object-position:center;display:block;left:-44px;top:-4px}
+.logo-wrap.brand-logo .brand-wordmark img{width:280px;height:280px;left:-36px;top:-154px}
+.footer-brand img{display:block;width:300px;max-width:100%;height:auto;border-radius:6px}
+.main-header.signin-header .brand-logo{width:320px}
+.brand-logo:focus-visible{outline:2px solid #93622b;outline-offset:5px}
+@media(max-width:1100px) and (min-width:721px){.main-header{grid-template-columns:280px minmax(120px,1fr) 195px;gap:16px}.logo-wrap.brand-logo{width:280px;gap:0}.brand-emblem{width:80px;height:84px}.logo-wrap.brand-logo .brand-emblem img{width:160px;height:160px;left:-41px;top:-3px}.brand-wordmark{width:192px;height:58px}.logo-wrap.brand-logo .brand-wordmark img{width:260px;height:260px;left:-34px;top:-143px}}
+@media(max-width:720px){.main-header{grid-template-columns:minmax(0,1fr) auto;gap:14px;padding:12px 16px}.logo-wrap.brand-logo{grid-column:1/-1;justify-self:center;width:320px}.main-header .header-actions{grid-column:1/-1;justify-self:center}.main-header .main-search{grid-column:1/-1;width:100%;box-sizing:border-box}.footer-brand img{width:300px}.main-header.signin-header{padding:12px 16px}}
+@media(max-width:360px){.logo-wrap.brand-logo{width:280px;gap:0}.brand-emblem{width:80px;height:84px}.logo-wrap.brand-logo .brand-emblem img{width:160px;height:160px;left:-41px;top:-3px}.brand-wordmark{width:192px;height:58px}.logo-wrap.brand-logo .brand-wordmark img{width:260px;height:260px;left:-34px;top:-143px}}
+
+@media(max-width:720px){.home-section-heading{flex-wrap:wrap}}
+
+/* Keep the full brand artwork visible beneath the desktop collection filters. */
+.certificate-card.sidebar-brand{display:block;height:auto;margin-top:22px;padding:0;background:#fcf9f2;border:1px solid #e5d6c0;border-radius:6px;overflow:hidden}
+.certificate-card.sidebar-brand img{display:block;width:100%;height:auto;max-width:100%;object-fit:contain;object-position:center}
+@media(max-width:720px){.certificate-card.sidebar-brand{display:none}}

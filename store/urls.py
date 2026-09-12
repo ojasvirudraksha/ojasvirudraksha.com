@@ -1,6 +1,7 @@
 from django.urls import path, include
-from . import views, help_views
+from . import views, help_views, search_views
 urlpatterns=[
+    path('search/suggestions/', search_views.product_suggestions, name='product_suggestions'),
     path('pages/<slug:slug>/', help_views.page, name='information_page'),
     path('contact/', help_views.contact, name='contact_us'),
     path('newsletter/', help_views.newsletter, name='newsletter'),

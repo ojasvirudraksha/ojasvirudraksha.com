@@ -1,6 +1,7 @@
 import hashlib
+from functools import wraps
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.core.cache import cache
@@ -27,6 +28,17 @@ def record_failure(request):
 def safe_next(request):
     target = request.POST.get('next') or request.GET.get('next') or '/account/'
     return target if url_has_allowed_host_and_scheme(target, {request.get_host()}, require_https=request.is_secure()) else '/account/'
+
+
+def customer_only(view_func):
+    @wraps(view_func)
+    def wrapped(request, *args, **kwargs):
+        if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+            logout(request)
+            messages.error(request, 'Staff accounts must use the admin portal.')
+            return redirect('account_login')
+        return view_func(request, *args, **kwargs)
+    return wrapped
 
 
 class CustomerLoginView(LoginView):
@@ -78,6 +90,7 @@ def signup(request):
 
 
 @never_cache
+@customer_only
 @login_required
 def dashboard(request):
     return render(request, 'accounts/dashboard.html', {'account_tab': 'overview', 'address_count': request.user.addresses.count(),
@@ -86,6 +99,7 @@ def dashboard(request):
 
 
 @never_cache
+@customer_only
 @login_required
 def profile(request):
     customer, _ = CustomerProfile.objects.get_or_create(user=request.user)
@@ -103,12 +117,14 @@ def profile(request):
 
 
 @never_cache
+@customer_only
 @login_required
 def addresses(request):
     return render(request, 'accounts/addresses.html', {'addresses': request.user.addresses.all(), 'account_tab': 'addresses'})
 
 
 @never_cache
+@customer_only
 @login_required
 def address_edit(request, pk=None):
     address = get_object_or_404(CustomerAddress, pk=pk, user=request.user) if pk else CustomerAddress(user=request.user)
@@ -128,6 +144,7 @@ def address_edit(request, pk=None):
 
 
 @never_cache
+@customer_only
 @login_required
 @require_POST
 def address_delete(request, pk):
@@ -144,6 +161,7 @@ def address_delete(request, pk):
 
 
 @never_cache
+@customer_only
 @login_required
 def wishlist(request):
     products = Product.objects.filter(active=True, saved_by__user=request.user).select_related('category').prefetch_related('variants').order_by('-saved_by__created_at')
@@ -156,6 +174,7 @@ def wishlist_data(user):
 
 
 @never_cache
+@customer_only
 @login_required
 @require_POST
 def wishlist_update(request):
@@ -178,6 +197,7 @@ def wishlist_update(request):
 
 
 @never_cache
+@customer_only
 @login_required
 def orders(request):
     return render(request, 'accounts/orders.html', {'account_tab': 'orders'})

@@ -1,12 +1,114 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 88" role="img" aria-labelledby="title">
-  <title id="title">Ojasvirudraksha</title>
-  <g fill="none" stroke="#ad813f" stroke-width="1.5">
-    <circle cx="39" cy="43" r="29"/>
-    <ellipse cx="39" cy="43" rx="12" ry="29"/>
-    <path d="M39 14v58M12 33q27 14 54 0M12 53q27-14 54 0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 430" role="img" aria-labelledby="brand-title">
+  <title id="brand-title">Ojasvirudraksha</title>
+  <defs>
+    <linearGradient id="gold" x1="0%" x2="100%" y1="0%" y2="0%">
+      <stop offset="0%" stop-color="#f7e4a7"/>
+      <stop offset="15%" stop-color="#d9b15d"/>
+      <stop offset="38%" stop-color="#b1772f"/>
+      <stop offset="55%" stop-color="#f6df9a"/>
+      <stop offset="78%" stop-color="#a76d24"/>
+      <stop offset="100%" stop-color="#f3d887"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#8f4d1d"/>
+      <stop offset="30%" stop-color="#643719"/>
+      <stop offset="60%" stop-color="#9b5a31"/>
+      <stop offset="100%" stop-color="#4d2a16"/>
+    </linearGradient>
+    <radialGradient id="bead" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#d7925b"/>
+      <stop offset="28%" stop-color="#9a5726"/>
+      <stop offset="66%" stop-color="#5c2f16"/>
+      <stop offset="100%" stop-color="#432111"/>
+    </radialGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#7d4e1f" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <g transform="translate(0 10)" filter="url(#softShadow)">
+    <g fill="none" stroke="url(#gold)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M210 52 C165 14, 124 18, 93 52"/>
+      <path d="M92 52 C62 96, 72 143, 112 161 C142 176, 146 174, 167 162"/>
+      <path d="M167 162 C182 143, 196 118, 222 93"/>
+      <path d="M270 52 C315 14, 356 18, 387 52"/>
+      <path d="M388 52 C418 96, 408 143, 368 161 C338 176, 334 174, 313 162"/>
+      <path d="M313 162 C298 143, 284 118, 258 93"/>
+      <path d="M180 38 C200 10, 234 12, 250 42" />
+      <path d="M210 48 C232 76, 257 86, 279 96"/>
+      <path d="M284 97 C308 95, 330 79, 344 51"/>
+      <path d="M165 162 C173 138, 189 122, 214 110"/>
+      <path d="M295 162 C287 138, 271 122, 246 110"/>
+      <path d="M252 30 L274 73 L298 30" fill="none"/>
+      <path d="M238 68 C240 88, 222 95, 214 108"/>
+      <path d="M266 68 C264 88, 282 95, 290 108"/>
+    </g>
+
+    <g fill="none" stroke="url(#gold)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M198 76 C182 51, 172 41, 142 35"/>
+      <path d="M248 76 C264 51, 274 41, 304 35"/>
+      <path d="M192 66 C166 87, 148 95, 116 99"/>
+      <path d="M256 66 C282 87, 300 95, 332 99"/>
+    </g>
+
+    <g stroke="url(#gold)" stroke-width="6" fill="none" stroke-linecap="round">
+      <path d="M186 48 L203 78 L221 48"/>
+      <path d="M221 48 L239 78 L257 48"/>
+      <path d="M257 48 L275 78 L293 48"/>
+    </g>
+
+    <g>
+      <circle cx="250" cy="177" r="132" fill="url(#gold)" opacity="0.94"/>
+      <circle cx="250" cy="177" r="102" fill="#f7f0e3" opacity="0.8"/>
+      <circle cx="250" cy="177" r="100" fill="url(#bead)"/>
+      <circle cx="250" cy="177" r="74" fill="#3d210f" opacity="0.12"/>
+
+      <g fill="#4a2611" opacity="0.88">
+        <g transform="translate(250 177)">
+          <g transform="rotate(0)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+          <g transform="rotate(30)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+          <g transform="rotate(60)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+          <g transform="rotate(90)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+          <g transform="rotate(120)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+          <g transform="rotate(150)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+          <g transform="rotate(180)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+          <g transform="rotate(210)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+          <g transform="rotate(240)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+          <g transform="rotate(270)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+          <g transform="rotate(300)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+          <g transform="rotate(330)"><path d="M0 -64 C20 -55, 20 -30, 0 -18 C-20 -30, -20 -55, 0 -64 Z"/></g>
+        </g>
+      </g>
+
+      <g fill="none" stroke="#d0a768" stroke-width="7" stroke-linecap="round">
+        <path d="M250 122 C212 140, 182 170, 178 209"/>
+        <path d="M250 122 C288 140, 318 170, 322 209"/>
+        <path d="M202 206 C220 215, 234 224, 250 240"/>
+        <path d="M298 206 C280 215, 266 224, 250 240"/>
+      </g>
+    </g>
+
+    <g fill="url(#wood)" transform="translate(0 0)">
+      <path d="M120 245 C83 228, 60 210, 60 180 C60 164, 72 150, 91 150 C106 150, 118 159, 127 170 C124 184, 122 205, 120 245 Z"/>
+      <path d="M380 245 C417 228, 440 210, 440 180 C440 164, 428 150, 409 150 C394 150, 382 159, 373 170 C376 184, 378 205, 380 245 Z"/>
+    </g>
+
+    <g stroke="url(#gold)" stroke-width="7" fill="none" stroke-linecap="round">
+      <path d="M110 200 C118 180, 125 164, 144 152"/>
+      <path d="M390 200 C382 180, 375 164, 356 152"/>
+    </g>
   </g>
-  <g fill="#654322" font-family="Georgia, serif" text-anchor="middle">
-    <text x="222" y="37" font-size="29" letter-spacing="6">OJASVI</text>
-    <text x="222" y="65" font-size="22" letter-spacing="3">RUDRAKSHA</text>
+
+  <g transform="translate(0 0)" text-anchor="middle">
+    <text x="490" y="210" fill="#4b2b18" font-size="126" letter-spacing="10" font-family="Georgia, 'Times New Roman', serif" font-weight="700">OJASVI</text>
+    <text x="490" y="286" fill="#4b2b18" font-size="70" letter-spacing="9" font-family="Georgia, 'Times New Roman', serif" font-weight="700">RUDRAKSHA</text>
+    <path d="M410 316 H570" stroke="url(#gold)" stroke-width="7" stroke-linecap="round"/>
+    <text x="490" y="360" fill="#7d5630" font-size="24" letter-spacing="8" font-family="Georgia, 'Times New Roman', serif">DIVINE ENERGY • AUTHENTIC ORIGIN • A BRIGHTER YOU</text>
+    <text x="490" y="398" fill="#8e6938" font-size="22" letter-spacing="9" font-family="Georgia, 'Times New Roman', serif">ROOTED IN TRADITION   |   FOR A HIGHER TOMORROW</text>
+  </g>
+
+  <g transform="translate(0 0)">
+    <circle cx="768" cy="114" r="28" fill="none" stroke="url(#gold)" stroke-width="5"/>
+    <text x="768" y="122" text-anchor="middle" fill="#8e6938" font-size="20" font-family="Georgia, 'Times New Roman', serif">TM</text>
   </g>
 </svg>

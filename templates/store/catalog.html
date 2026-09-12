@@ -28,7 +28,7 @@
         <button class="apply-filters" type="submit">Apply filters</button><a class="clear-filters" href="/shop/#main-content">Clear all</a>
       </form>
     </details>
-    <div class="certificate-card"><img src="{% static 'images/ojasvirudraksha-logo.svg' %}" alt="Ojasvirudraksha"><div><span>A sacred connection.<br>A thoughtful selection.</span><small>Discover your Rudraksha.</small></div></div>
+    <div class="certificate-card sidebar-brand"><img src="{% static 'images/ojasvi-brand-original.png' %}" alt="Ojasvi Rudraksha — Divine energy, authentic origin, a brighter you" width="1254" height="1254" loading="lazy"></div>
   </aside>
   <main id="main-content" class="collection-main">
     <div class="collection-head"><div><p class="eyebrow">THE OJASVIRUDRAKSHA SELECTION</p><h2>{{ collection_name }} <small>{{ product_count }} products</small></h2></div><div class="sort-control"><label for="sort-order">Sort by</label><select id="sort-order" name="sort" form="collection-filters"><option value="featured" {% if sort == 'featured' %}selected{% endif %}>Featured</option><option value="price-asc" {% if sort == 'price-asc' %}selected{% endif %}>Price: low to high</option><option value="price-desc" {% if sort == 'price-desc' %}selected{% endif %}>Price: high to low</option><option value="name" {% if sort == 'name' %}selected{% endif %}>Name: A–Z</option></select></div></div>
