@@ -30,7 +30,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     collections = models.ManyToManyField(Category, blank=True, related_name="collection_products")
     name = models.CharField(max_length=180)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(max_length=200, unique=True)
     origin = models.CharField(max_length=80, blank=True)
     size = models.CharField(max_length=60, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
@@ -127,7 +127,16 @@ class CustomerAddress(models.Model):
 
     class Meta:
         ordering = ['-is_default', 'id']
-        constraints = [models.UniqueConstraint(fields=['user'], condition=Q(is_default=True), name='one_default_customer_address')]
+        constraints = [
+            models.UniqueConstraint(
+                models.Case(
+                    models.When(is_default=True, then=models.F('user')),
+                    default=None,
+                    output_field=models.BigIntegerField(),
+                ),
+                name='one_default_customer_address',
+            ),
+        ]
         verbose_name_plural = 'Customer addresses'
 
     def __str__(self):

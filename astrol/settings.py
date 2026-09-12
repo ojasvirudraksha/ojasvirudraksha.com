@@ -43,15 +43,29 @@ TEMPLATES = [{
     ]}
 }]
 WSGI_APPLICATION = "astrol.wsgi.application"
-DATABASES = {"default":{"ENGINE":"django.db.backends.sqlite3","NAME":os.environ.get("DJANGO_DB_PATH", BASE_DIR/"db.sqlite3")}}
+if os.environ.get("MYSQL_HOST"):
+    DATABASES = {"default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": os.environ.get("MYSQL_DATABASE", "astrol"),
+        "USER": os.environ.get("MYSQL_USER", "astrol"),
+        "PASSWORD": os.environ["MYSQL_PASSWORD"],
+        "HOST": os.environ["MYSQL_HOST"],
+        "PORT": os.environ.get("MYSQL_PORT", "3306"),
+        "OPTIONS": {"charset": "utf8mb4", "init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
+    }}
+else:
+    DATABASES = {"default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.environ.get("DJANGO_DB_PATH", BASE_DIR / "db.sqlite3"),
+    }}
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", "OPTIONS": {"min_length": 8}},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
-LANGUAGE_CODE="en-us"
-TIME_ZONE="Asia/Kolkata"
+LANGUAGE_CODE = os.environ.get("DJANGO_LANGUAGE_CODE", "en-us")
+TIME_ZONE = os.environ.get("DJANGO_TIME_ZONE", "Asia/Kolkata")
 USE_I18N=True
 USE_TZ=True
 STATIC_URL="/static/"
