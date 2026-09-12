@@ -36,16 +36,23 @@
   const authenticated = document.body.dataset.customerAuthenticated === 'true';
   let guest = {};
   try {
-    const value = JSON.parse(localStorage.getItem('astrol-wishlist') || '{}');
+    // Carry existing browser favourites forward during the brand rename.
+    const legacy = localStorage.getItem('astrol-wishlist');
+    if (legacy) {
+      const merged = {...JSON.parse(legacy), ...JSON.parse(localStorage.getItem('ojasvirudraksha-wishlist') || '{}')};
+      localStorage.setItem('ojasvirudraksha-wishlist', JSON.stringify(merged));
+      localStorage.removeItem('astrol-wishlist');
+    }
+    const value = JSON.parse(localStorage.getItem('ojasvirudraksha-wishlist') || '{}');
     if (value && typeof value === 'object' && !Array.isArray(value)) {
       for (const [id, item] of Object.entries(value)) {
-        if (/^\d+$/.test(id) && item && typeof item.name === 'string' && typeof item.url === 'string' && /^\/product\/[a-z0-9-]+\/$/.test(item.url)) guest[id] = item;
+        if (/^\d+$/.test(id) && item && typeof item.name === 'string' && typeof item.url === 'string' && /^\/product\/[a-z0-9-]+\/$/.test(item.url)) guest[id] = {...item, name: item.name.replace(/astrol/gi, 'Ojasvirudraksha'), url: item.url.replace(/astrol/g, 'ojasvirudraksha')};
       }
     }
   } catch (_) {}
   let saved = authenticated ? JSON.parse(document.querySelector('#customer-wishlist-data')?.textContent || '{}') : guest;
   const status = document.querySelector('#wishlist-status');
-  const persistGuest = () => { try { localStorage.setItem('astrol-wishlist', JSON.stringify(saved)); } catch (_) {} };
+  const persistGuest = () => { try { localStorage.setItem('ojasvirudraksha-wishlist', JSON.stringify(saved)); } catch (_) {} };
   const updateServer = async (action, id, ids = []) => {
     const body = new URLSearchParams({action});
     if (id) body.set('product', id);
@@ -87,7 +94,7 @@
   let mergeComplete = Promise.resolve();
   if (authenticated && Object.keys(guest).length) {
     mergeComplete = updateServer('merge', null, Object.keys(guest)).then(() => {
-      try { localStorage.removeItem('astrol-wishlist'); } catch (_) {}
+      try { localStorage.removeItem('ojasvirudraksha-wishlist'); } catch (_) {}
       render();
       if (document.querySelector('[data-wishlist-page]')) window.location.reload();
     }).catch(() => { status.textContent = 'Your browser favourites could not be synced. Please refresh to retry.'; });

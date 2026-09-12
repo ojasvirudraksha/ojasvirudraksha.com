@@ -14,7 +14,7 @@ docker-compose up --build -d
 
 Open http://127.0.0.1:8000/. Docker starts MySQL first, then runs migrations and loads the initial catalog; allow a moment for them to finish.
 
-To use another port, change `ASTROL_PORT` in `.env`. Docker Compose reads this file
+To use another port, change `OJASVIRUDRAKSHA_PORT` in `.env`. Docker Compose reads this file
 and passes the settings to each service. Keep `.env` private; it is excluded from Git
 and the Docker image.
 
@@ -29,6 +29,9 @@ docker-compose exec web python manage.py createsuperuser
 Sign in at http://127.0.0.1:8000/admin/ to manage products, inventory, customers and site content. Use the port set in `.env`.
 
 Run `docker-compose up --build -d` again after changing code or `.env`.
+Startup also updates existing catalog and information-page branding, preserving
+product IDs, carts and wishlists. Existing product links redirect to the renamed URLs.
+Keep existing MySQL credentials when upgrading; the new example names apply to fresh databases.
 
 ## Useful commands
 

@@ -22,7 +22,7 @@ def set_country(request):
     if not url_has_allowed_host_and_scheme(target, {request.get_host()}, require_https=request.is_secure()):
         target = '/'
     response = redirect(target or '/')
-    response.set_cookie('astrol_country', code, max_age=365 * 86400, httponly=True, samesite='Lax', secure=request.is_secure())
+    response.set_cookie('ojasvirudraksha_country', code, max_age=365 * 86400, httponly=True, samesite='Lax', secure=request.is_secure())
     return response
 
 
@@ -113,7 +113,7 @@ def _catalog_context(request):
     return {"products": page.object_list, "page_obj": page, "product_count": page.paginator.count,
             "page_query": params.urlencode(), "categories": categories, "selected": category,
             "collection_name": "All Products" if category == "all" else selected_category.name,
-            "collection_description": selected_category.description if selected_category else "Discover the full ASTROL collection.",
+            "collection_description": selected_category.description if selected_category else "Discover the full OJASVIRUDRAKSHA collection.",
             "collection_cover": cover, "q": q, "selected_origins": origins, "selected_mukhis": mukhis,
             "origins": origin_options, "mukhis": [str(n) for n in range(1, 22)], "price_filter": price, "sort": sort,
             "availability": availability, "has_filters": bool(active_filters), "active_filters": active_filters,
@@ -130,6 +130,11 @@ def catalog(request):
 
 
 def product_detail(request, slug):
+    # Preserve product links shared before the brand rename.
+    if 'astrol' in slug:
+        renamed = Product.objects.filter(slug=slug.replace('astrol', 'ojasvirudraksha'), active=True).first()
+        if renamed:
+            return redirect(renamed.get_absolute_url(), permanent=True)
     product = get_object_or_404(Product.objects.select_related("category").prefetch_related("variants"), slug=slug, active=True)
     variants = list(product.variants.all())
     selected_variant = min((v for v in variants if v.can_purchase), key=lambda v: v.price, default=None)

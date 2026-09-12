@@ -9,7 +9,7 @@ class CollectionTests(TestCase):
         Category.objects.create(name="Malas", slug="malas")
         for mukhi, origin, price in [(1, "Nepali", 18500), (2, "Nepali", 5500),
                                      (3, "Indonesian", 2800), (11, "Nepali", 6200)]:
-            Product.objects.create(category=rudraksha, name=f"Astrol {mukhi} Mukhi Rudraksha",
+            Product.objects.create(category=rudraksha, name=f"Ojasvirudraksha {mukhi} Mukhi Rudraksha",
                                    slug=f"rudraksha-{mukhi}", origin=origin, price=price)
 
     def test_home_shows_curated_products(self):

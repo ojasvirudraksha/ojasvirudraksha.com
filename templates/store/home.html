@@ -1,11 +1,11 @@
 {% extends 'base.html' %}{% load static %}
-{% block title %}ASTROL | Sacred essentials for everyday living{% endblock %}
+{% block title %}OJASVIRUDRAKSHA | Sacred essentials for everyday living{% endblock %}
 {% block extra_head %}
-<meta name="description" content="Discover ASTROL's collection of Rudraksha, malas, spiritual bracelets, Tulsi malas and pearls. Ancient wisdom, thoughtfully brought into everyday life.">
+<meta name="description" content="Discover OJASVIRUDRAKSHA's collection of Rudraksha, malas, spiritual bracelets, Tulsi malas and pearls. Ancient wisdom, thoughtfully brought into everyday life.">
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
 {% block content %}
-<main id="main-content" class="astrol-home">
+<main id="main-content" class="ojasvirudraksha-home">
   <section class="home-hero" aria-labelledby="home-title">
     <div class="home-hero-copy">
       <p class="eyebrow"><span></span> ANCIENT WISDOM. EVERYDAY CONNECTION.</p>
@@ -16,12 +16,12 @@
     </div>
     <div class="home-hero-visual">
       <img class="home-hero-photo" src="{% static 'images/exact/hero-rudraksha.jpg' %}" alt="Natural Rudraksha resting on stone beside a traditional brass lamp" fetchpriority="high" width="705" height="188">
-      <span class="hero-seal" aria-hidden="true">ASTROL<span>✧</span>THE SACRED EDIT</span>
+      <span class="hero-seal" aria-hidden="true">OJASVIRUDRAKSHA<span>✧</span>THE SACRED EDIT</span>
       <div class="hero-image-caption"><span>01 / THE RUDRAKSHA COLLECTION</span><a href="/shop/?category=rudraksha">A connection beyond the ordinary. <span aria-hidden="true">↗</span></a></div>
     </div>
   </section>
 
-  <div class="home-values" aria-label="The ASTROL approach"><span>Rooted in tradition</span><i aria-hidden="true">✧</i><span>Natural beauty, individual character</span><i aria-hidden="true">✧</i><span>For rituals, for everyday</span><i aria-hidden="true">✧</i><span>Meaningful gifting</span></div>
+  <div class="home-values" aria-label="The OJASVIRUDRAKSHA approach"><span>Rooted in tradition</span><i aria-hidden="true">✧</i><span>Natural beauty, individual character</span><i aria-hidden="true">✧</i><span>For rituals, for everyday</span><i aria-hidden="true">✧</i><span>Meaningful gifting</span></div>
 
   {% if home_collections %}
   <section class="home-section home-collections" aria-labelledby="collections-title">
@@ -31,14 +31,14 @@
   {% endif %}
 
   <section id="home-edit" class="home-section home-edit" aria-labelledby="edit-title">
-    <div class="home-section-heading"><div><p class="eyebrow">THOUGHTFULLY SELECTED FOR YOU</p><h2 id="edit-title">The ASTROL edit.</h2></div><a class="home-text-link" href="/shop/{% if selected_edit != 'curated' %}?category={{ selected_edit }}{% endif %}">Explore more <span aria-hidden="true">↗</span></a></div>
+    <div class="home-section-heading"><div><p class="eyebrow">THOUGHTFULLY SELECTED FOR YOU</p><h2 id="edit-title">The OJASVIRUDRAKSHA edit.</h2></div><a class="home-text-link" href="/shop/{% if selected_edit != 'curated' %}?category={{ selected_edit }}{% endif %}">Explore more <span aria-hidden="true">↗</span></a></div>
     <nav class="home-edit-links" aria-label="Featured product collections">{% for value, label in home_edits %}<a href="/?edit={{ value }}#home-edit" {% if selected_edit == value %}aria-current="true"{% endif %}>{{ label }}</a>{% endfor %}</nav>
     <div class="product-grid exact-grid home-product-grid">{% for p in featured_products %}{% include 'store/product_card.html' %}{% empty %}<p class="home-empty">A new selection is on its way. <a href="/shop/">Explore the collections →</a></p>{% endfor %}</div>
   </section>
 
   <section class="home-ritual" aria-labelledby="ritual-title">
     <div class="ritual-art"><span class="ritual-ring ring-one" aria-hidden="true"></span><span class="ritual-ring ring-two" aria-hidden="true"></span><p class="eyebrow">A MOMENT. A BREATH. A BEGINNING.</p><div class="ritual-symbol" aria-hidden="true">ॐ</div><p>Make room for<br><em>what matters.</em></p></div>
-    <div class="ritual-copy"><p class="eyebrow">MORE THAN SOMETHING YOU WEAR</p><h2>Make the everyday<br>a little more <em>meaningful.</em></h2><p>A quiet morning. A familiar prayer. A small reminder to pause. The pieces we keep close can become part of the moments that ground us.</p><p>At ASTROL, we bring together spiritual essentials inspired by India's traditions — for your practice, your personal style, and the people you cherish.</p><a class="home-button light-button" href="/shop/?category=tulsi-mala">Find your daily companion <span aria-hidden="true">↗</span></a></div>
+    <div class="ritual-copy"><p class="eyebrow">MORE THAN SOMETHING YOU WEAR</p><h2>Make the everyday<br>a little more <em>meaningful.</em></h2><p>A quiet morning. A familiar prayer. A small reminder to pause. The pieces we keep close can become part of the moments that ground us.</p><p>At OJASVIRUDRAKSHA, we bring together spiritual essentials inspired by India's traditions — for your practice, your personal style, and the people you cherish.</p><a class="home-button light-button" href="/shop/?category=tulsi-mala">Find your daily companion <span aria-hidden="true">↗</span></a></div>
   </section>
 
   <section class="home-section home-discover" aria-labelledby="discover-title">

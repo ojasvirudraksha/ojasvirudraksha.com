@@ -45,9 +45,9 @@ def validate_rates(data):
 
 
 def market(request):
-    if hasattr(request, '_astrol_market'):
-        return request._astrol_market
-    country = next((c for c in countries() if c['code'] == request.COOKIES.get('astrol_country', 'IN')), None)
+    if hasattr(request, '_ojasvirudraksha_market'):
+        return request._ojasvirudraksha_market
+    country = next((c for c in countries() if c['code'] == request.COOKIES.get('ojasvirudraksha_country', request.COOKIES.get('astrol_country', 'IN'))), None)
     country = country or next(c for c in countries() if c['code'] == 'IN')
     data = rates()
     code = country['currency']
@@ -59,7 +59,7 @@ def market(request):
               'digits': get_currency_precision(code), 'fallback': fallback,
               'date': datetime.fromtimestamp(stamp, timezone.utc).date() if stamp else None,
               'stale': bool(stamp and datetime.now(timezone.utc).timestamp() - stamp > 3 * 86400)}
-    request._astrol_market = result
+    request._ojasvirudraksha_market = result
     return result
 
 

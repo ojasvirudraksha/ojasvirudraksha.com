@@ -3,7 +3,7 @@ services:
   web:
     build: .
     ports:
-      - "127.0.0.1:${ASTROL_PORT:-8000}:8000"
+      - "127.0.0.1:${OJASVIRUDRAKSHA_PORT:-8000}:8000"
     env_file: .env
     depends_on:
       mysql:

@@ -15,7 +15,7 @@ class ProductDescriptionTests(TestCase):
         self.category = Category.objects.create(name='Rudraksha', slug='rudraksha')
         self.product = Product.objects.create(
             category=self.category, name='Test bead', slug='test-bead', price='1200',
-            source_id='123', stock_quantity=8, description='Prototype product listing for the local Astrol storefront.',
+            source_id='123', stock_quantity=8, description='Prototype product listing for the local Ojasvirudraksha storefront.',
         )
 
     def catalog(self, root):

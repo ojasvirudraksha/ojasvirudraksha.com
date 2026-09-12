@@ -32,7 +32,7 @@ def contact(request):
     form = ContactForm(request.POST if request.method == 'POST' else None)
     if request.method == 'POST' and form.is_valid():
         form.save()
-        messages.success(request, 'Your enquiry has been saved for the ASTROL team to review.')
+        messages.success(request, 'Your enquiry has been saved for the OJASVIRUDRAKSHA team to review.')
         return redirect('contact_us')
     return render(request, 'store/contact.html', {'form': form})
 

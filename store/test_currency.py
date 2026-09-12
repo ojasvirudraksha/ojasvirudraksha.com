@@ -15,7 +15,7 @@ class CurrencyTests(TestCase):
     def test_country_post_persists_and_rejects_invalid_redirect(self, rates):
         response = self.client.post('/country/', {'country': 'US', 'next': '/shop/?category=rudraksha&sort=price-asc'})
         self.assertEqual(response.url, '/shop/?category=rudraksha&sort=price-asc')
-        self.assertEqual(response.cookies['astrol_country'].value, 'US')
+        self.assertEqual(response.cookies['ojasvirudraksha_country'].value, 'US')
         self.assertContains(self.client.get('/product/bead/'), 'USD 12.01')
         self.assertEqual(self.client.post('/country/', {'country': 'US', 'next': 'https://evil.example/'}).url, '/')
         self.assertEqual(self.client.post('/country/', {'country': 'invalid'}).status_code, 400)
@@ -25,7 +25,7 @@ class CurrencyTests(TestCase):
         self.assertEqual(self.product.price, Decimal('1000.55'))
 
     def test_cart_rounds_units_and_total_consistently(self, rates):
-        self.client.cookies['astrol_country'] = 'US'
+        self.client.cookies['ojasvirudraksha_country'] = 'US'
         session=self.client.session
         session['cart']={str(self.product.pk): 3}
         session.save()
@@ -36,21 +36,21 @@ class CurrencyTests(TestCase):
 
     def test_variant_and_filter_labels_use_currency(self, rates):
         ProductVariant.objects.create(product=self.product, name='Large', price='2000', available=True)
-        self.client.cookies['astrol_country']='US'
+        self.client.cookies['ojasvirudraksha_country']='US'
         self.assertContains(self.client.get('/product/bead/'), 'data-price="USD 24.00"')
         response=self.client.get('/shop/?price=under-3000')
         self.assertContains(response, 'Under USD 36.00')
         self.assertNotContains(response, 'Under ₹')
 
     def test_currency_precision_and_missing_rate_fallback(self, rates):
-        request=RequestFactory().get('/', HTTP_COOKIE='astrol_country=JP')
+        request=RequestFactory().get('/', HTTP_COOKIE='ojasvirudraksha_country=JP')
         self.assertEqual(format_money(100, market(request)), 'JPY 180')
-        request=RequestFactory().get('/', HTTP_COOKIE='astrol_country=KW')
+        request=RequestFactory().get('/', HTTP_COOKIE='ojasvirudraksha_country=KW')
         self.assertEqual(format_money(100, market(request)), 'KWD 0.370')
-        request=RequestFactory().get('/', HTTP_COOKIE='astrol_country=GB')
+        request=RequestFactory().get('/', HTTP_COOKIE='ojasvirudraksha_country=GB')
         self.assertEqual(market(request)['currency'], 'USD')
         self.assertTrue(market(request)['fallback'])
-        request=RequestFactory().get('/', HTTP_COOKIE='astrol_country=invalid')
+        request=RequestFactory().get('/', HTTP_COOKIE='ojasvirudraksha_country=invalid')
         self.assertEqual(market(request)['currency'], 'INR')
 
     def test_default_prices_retain_paise(self, rates):

@@ -1,7 +1,7 @@
 {% extends "admin/index.html" %}
 {% block content %}
 {% if inventory_stats %}
-<section class="inventory-welcome"><p class="admin-eyebrow">YOUR STORE, AT A GLANCE</p><h2>Welcome to your inventory.</h2><p>Manage your ASTROL catalog, product options and stock from one place.</p><div class="inventory-actions">{% if perms.store.add_product %}<a class="admin-primary" href="{% url 'admin:store_product_add' %}">+ Add a product</a>{% endif %}<a href="{% url 'admin:store_product_changelist' %}">Manage products →</a>{% if perms.store.view_customerprofile %}<a href="{% url 'admin:store_customerprofile_changelist' %}">Manage customers →</a>{% endif %}<a href="/" target="_blank" rel="noopener">Open customer storefront ↗</a></div></section>
+<section class="inventory-welcome"><p class="admin-eyebrow">YOUR STORE, AT A GLANCE</p><h2>Welcome to your inventory.</h2><p>Manage your OJASVIRUDRAKSHA catalog, product options and stock from one place.</p><div class="inventory-actions">{% if perms.store.add_product %}<a class="admin-primary" href="{% url 'admin:store_product_add' %}">+ Add a product</a>{% endif %}<a href="{% url 'admin:store_product_changelist' %}">Manage products →</a>{% if perms.store.view_customerprofile %}<a href="{% url 'admin:store_customerprofile_changelist' %}">Manage customers →</a>{% endif %}<a href="/" target="_blank" rel="noopener">Open customer storefront ↗</a></div></section>
 <div class="inventory-stats">
   <a href="{% url 'admin:store_product_changelist' %}"><span>Products</span><strong>{{ inventory_stats.products }}</strong><small>Complete catalog</small></a>
   <a href="{% url 'admin:store_product_changelist' %}?active__exact=1"><span>Published</span><strong>{{ inventory_stats.published }}</strong><small>Visible to customers</small></a>

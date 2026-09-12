@@ -12,5 +12,5 @@ class Command(BaseCommand):
         if Product.objects.exists():
             self.stdout.write('Existing catalog preserved.')
             return
-        call_command('seed_astrol', stdout=self.stdout)
+        call_command('seed_ojasvirudraksha', stdout=self.stdout)
         call_command('import_reference_catalog', stdout=self.stdout)

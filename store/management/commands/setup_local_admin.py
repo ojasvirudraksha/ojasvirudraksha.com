@@ -9,14 +9,14 @@ from django.db import transaction
 
 
 class Command(BaseCommand):
-    help = 'Create the first local ASTROL owner account and save its generated login privately.'
+    help = 'Create the first local OJASVIRUDRAKSHA owner account and save its generated login privately.'
 
     def handle(self, *args, **options):
         User = get_user_model()
         if User.objects.filter(is_superuser=True).exists():
             self.stdout.write('An owner account already exists. No login was changed.')
             return
-        username = 'astrol_owner'
+        username = 'ojasvirudraksha_owner'
         if User.objects.filter(username=username).exists():
             raise CommandError('This username already exists. Use createsuperuser with another username.')
         directory = Path(settings.BASE_DIR) / '.local'
@@ -30,5 +30,5 @@ class Command(BaseCommand):
         with os.fdopen(descriptor, 'w') as output:
             with transaction.atomic():
                 User.objects.create_superuser(username=username, password=password)
-                output.write(f'ASTROL local admin access\n\nPortal: http://127.0.0.1:8000/admin/\nUsername: {username}\nPassword: {password}\n\nChange your password after signing in using the Change password link.\nCustomer portal: http://127.0.0.1:8000/\n')
+                output.write(f'OJASVIRUDRAKSHA local admin access\n\nPortal: http://127.0.0.1:8000/admin/\nUsername: {username}\nPassword: {password}\n\nChange your password after signing in using the Change password link.\nCustomer portal: http://127.0.0.1:8000/\n')
         self.stdout.write(self.style.SUCCESS(f'Owner account created. Login details saved privately to {path}'))

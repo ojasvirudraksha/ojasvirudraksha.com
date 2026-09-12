@@ -11,14 +11,14 @@ RUN apt-get update \
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
-RUN useradd --create-home --uid 10001 astrol \
+RUN useradd --create-home --uid 10001 ojasvirudraksha \
     && mkdir -p /data /app/.local /app/media \
-    && chown -R astrol:astrol /data /app
+    && chown -R ojasvirudraksha:ojasvirudraksha /data /app
 
-COPY --chown=astrol:astrol . .
+COPY --chown=ojasvirudraksha:ojasvirudraksha . .
 RUN chmod +x /app/docker/entrypoint.sh
 
-USER astrol
+USER ojasvirudraksha
 EXPOSE 8000
 
 ENTRYPOINT ["/app/docker/entrypoint.sh"]

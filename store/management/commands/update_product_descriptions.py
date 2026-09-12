@@ -10,7 +10,7 @@ from store.models import Product
 
 
 class Command(BaseCommand):
-    help = 'Apply the original ASTROL description catalog, preserving other product fields.'
+    help = 'Apply the original OJASVIRUDRAKSHA description catalog, preserving other product fields.'
 
     def add_arguments(self, parser):
         parser.add_argument('--catalog', type=Path, default=settings.BASE_DIR / 'store/data/product_descriptions.json')
@@ -34,9 +34,9 @@ class Command(BaseCommand):
                 if old == new:
                     continue
                 placeholder = not product.description.strip() or any(marker in product.description for marker in (
-                    'Prototype product listing for the local Astrol storefront.',
+                    'Prototype product listing for the local Ojasvirudraksha storefront.',
                     'Choose an available option above to see its price.',
-                    'This sample shows how the ASTROL collection will look.',
+                    'This sample shows how the OJASVIRUDRAKSHA collection will look.',
                 ))
                 if options['overwrite'] or placeholder:
                     updates.append((product, old, new))

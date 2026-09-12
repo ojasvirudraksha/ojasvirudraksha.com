@@ -71,7 +71,7 @@ def signup(request):
             else:
                 login(request, user)
                 request.session.set_expiry(0)
-                messages.success(request, 'Welcome to ASTROL. Your account is ready.')
+                messages.success(request, 'Welcome to OJASVIRUDRAKSHA. Your account is ready.')
                 return redirect(safe_next(request))
         record_failure(request)
     return render(request, 'accounts/signup.html', {'form': form, 'next': safe_next(request)})
