@@ -200,3 +200,48 @@ Admin > Store contacts controls the support email, WhatsApp number and social UR
 Blank contact/social values are not shown; no reference-site contact details are used.
 Support enquiries and Newsletter subscribers are saved in SQLite and managed in admin.
 These forms do not send email or start marketing campaigns. Newsletter consent is required.
+
+## Docker Compose development
+
+Install/start Docker Desktop (or Docker Engine with Compose). From this folder:
+
+```sh
+docker compose up --build -d --wait
+```
+
+Open **http://127.0.0.1:8001/** (admin: `/admin/`). Port 8001 leaves the existing
+non-Docker server on port 8000 untouched. Optionally copy `.env.example` to `.env`
+and change `ASTROL_PORT`.
+
+First startup runs migrations and loads all 433 catalog listings into a **separate**
+SQLite database. Existing catalog entries are never reseeded on restart. Existing
+host customer accounts, contact settings, uploaded files and admin edits are not
+imported. Create a container administrator and refresh currency rates with:
+
+```sh
+docker compose exec web python manage.py createsuperuser
+docker compose exec web python manage.py refresh_exchange_rates
+```
+
+Until rates are fetched, currency display falls back to INR. Contact details can be
+entered in the container's admin under Store contacts.
+
+Useful commands:
+
+```sh
+docker compose logs -f web
+docker compose exec web python manage.py test store
+docker compose down
+docker compose up --build --watch
+```
+
+Watch mode syncs source/templates/assets and restarts after Python changes; dependency
+changes rebuild the image. Requires Docker Compose 2.23+ for sync-and-restart.
+Normal `up --build` is available without watch mode.
+
+Named volumes persist SQLite (`database`), uploads (`uploads`), and secrets/rate cache/
+file-based email (`local_state`). `docker compose down` preserves them; **adding `-v`
+deletes the container's saved data**. The image excludes the host database, `.local`,
+`.env`, uploads and credentials. The application runs as a non-root user. This is a
+local development setup using Django's development server, with access bound to
+127.0.0.1; it is not an internet-facing production deployment.

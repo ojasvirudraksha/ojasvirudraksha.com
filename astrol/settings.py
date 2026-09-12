@@ -10,8 +10,8 @@ try:
 except FileExistsError:
     pass
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") or _secret_path.read_text().strip()
-DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+DEBUG = os.environ.get("DJANGO_DEBUG", "true").lower() == "true"
+ALLOWED_HOSTS = [host.strip() for host in os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",") if host.strip()]
 INSTALLED_APPS = [
     "django.contrib.admin","django.contrib.auth","django.contrib.contenttypes",
     "django.contrib.sessions","django.contrib.messages","django.contrib.staticfiles",
@@ -43,7 +43,7 @@ TEMPLATES = [{
     ]}
 }]
 WSGI_APPLICATION = "astrol.wsgi.application"
-DATABASES = {"default":{"ENGINE":"django.db.backends.sqlite3","NAME":BASE_DIR/"db.sqlite3"}}
+DATABASES = {"default":{"ENGINE":"django.db.backends.sqlite3","NAME":os.environ.get("DJANGO_DB_PATH", BASE_DIR/"db.sqlite3")}}
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", "OPTIONS": {"min_length": 8}},

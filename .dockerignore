@@ -1,0 +1,15 @@
+.git
+.venv
+.local
+.env
+.env.*
+**/__pycache__
+**/*.py[cod]
+**/*.sqlite3
+**/*.sqlite3-*
+**/*.sqlite
+**/*.pem
+**/*.key
+**/*.log
+**/.DS_Store
+media
