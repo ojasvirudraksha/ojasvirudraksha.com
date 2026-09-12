@@ -1,0 +1,56 @@
+{% extends 'base.html' %}{% load static %}
+{% block title %}ASTROL | Sacred essentials for everyday living{% endblock %}
+{% block extra_head %}
+<meta name="description" content="Discover ASTROL's collection of Rudraksha, malas, spiritual bracelets, Tulsi malas and pearls. Ancient wisdom, thoughtfully brought into everyday life.">
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+{% block content %}
+<main id="main-content" class="astrol-home">
+  <section class="home-hero" aria-labelledby="home-title">
+    <div class="home-hero-copy">
+      <p class="eyebrow"><span></span> ANCIENT WISDOM. EVERYDAY CONNECTION.</p>
+      <h1 id="home-title">A little closer<br>to the <em>sacred.</em></h1>
+      <p class="home-hero-description">Meaningful pieces for the way you live.<br>Discover Rudraksha, malas and spiritual essentials<br class="desktop-break"> that bring intention to your everyday.</p>
+      <div class="home-hero-actions"><a class="home-button" href="/shop/">Explore the collections <span aria-hidden="true">↗</span></a><a class="home-text-link" href="/shop/?category=rudraksha">Discover Rudraksha <span aria-hidden="true">→</span></a></div>
+      <div class="hero-signature"><span class="signature-line"></span><p>Rooted in India.<br><strong>Chosen with meaning.</strong></p></div>
+    </div>
+    <div class="home-hero-visual">
+      <img class="home-hero-photo" src="{% static 'images/exact/hero-rudraksha.jpg' %}" alt="Natural Rudraksha resting on stone beside a traditional brass lamp" fetchpriority="high" width="705" height="188">
+      <span class="hero-seal" aria-hidden="true">ASTROL<span>✧</span>THE SACRED EDIT</span>
+      <div class="hero-image-caption"><span>01 / THE RUDRAKSHA COLLECTION</span><a href="/shop/?category=rudraksha">A connection beyond the ordinary. <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </section>
+
+  <div class="home-values" aria-label="The ASTROL approach"><span>Rooted in tradition</span><i aria-hidden="true">✧</i><span>Natural beauty, individual character</span><i aria-hidden="true">✧</i><span>For rituals, for everyday</span><i aria-hidden="true">✧</i><span>Meaningful gifting</span></div>
+
+  {% if home_collections %}
+  <section class="home-section home-collections" aria-labelledby="collections-title">
+    <div class="home-section-heading"><div><p class="eyebrow">FIND YOUR CONNECTION</p><h2 id="collections-title">A world of meaning.</h2></div><a class="home-text-link" href="/shop/">View all collections <span aria-hidden="true">↗</span></a></div>
+    <div class="home-category-grid">{% for collection in home_collections %}<a class="home-category" href="/shop/?category={{ collection.slug }}"><span class="home-category-image"><img src="{{ collection.product.image_url }}" alt="" loading="lazy" width="180" height="180"></span><h3>{{ collection.name }}</h3><p>{{ collection.subtitle }}</p></a>{% endfor %}</div>
+  </section>
+  {% endif %}
+
+  <section id="home-edit" class="home-section home-edit" aria-labelledby="edit-title">
+    <div class="home-section-heading"><div><p class="eyebrow">THOUGHTFULLY SELECTED FOR YOU</p><h2 id="edit-title">The ASTROL edit.</h2></div><a class="home-text-link" href="/shop/{% if selected_edit != 'curated' %}?category={{ selected_edit }}{% endif %}">Explore more <span aria-hidden="true">↗</span></a></div>
+    <nav class="home-edit-links" aria-label="Featured product collections">{% for value, label in home_edits %}<a href="/?edit={{ value }}#home-edit" {% if selected_edit == value %}aria-current="true"{% endif %}>{{ label }}</a>{% endfor %}</nav>
+    <div class="product-grid exact-grid home-product-grid">{% for p in featured_products %}{% include 'store/product_card.html' %}{% empty %}<p class="home-empty">A new selection is on its way. <a href="/shop/">Explore the collections →</a></p>{% endfor %}</div>
+  </section>
+
+  <section class="home-ritual" aria-labelledby="ritual-title">
+    <div class="ritual-art"><span class="ritual-ring ring-one" aria-hidden="true"></span><span class="ritual-ring ring-two" aria-hidden="true"></span><p class="eyebrow">A MOMENT. A BREATH. A BEGINNING.</p><div class="ritual-symbol" aria-hidden="true">ॐ</div><p>Make room for<br><em>what matters.</em></p></div>
+    <div class="ritual-copy"><p class="eyebrow">MORE THAN SOMETHING YOU WEAR</p><h2>Make the everyday<br>a little more <em>meaningful.</em></h2><p>A quiet morning. A familiar prayer. A small reminder to pause. The pieces we keep close can become part of the moments that ground us.</p><p>At ASTROL, we bring together spiritual essentials inspired by India's traditions — for your practice, your personal style, and the people you cherish.</p><a class="home-button light-button" href="/shop/?category=tulsi-mala">Find your daily companion <span aria-hidden="true">↗</span></a></div>
+  </section>
+
+  <section class="home-section home-discover" aria-labelledby="discover-title">
+    <div class="home-section-heading"><div><p class="eyebrow">YOUR PRACTICE. YOUR EXPRESSION.</p><h2 id="discover-title">Discover your everyday ritual.</h2></div></div>
+    <div class="home-discover-grid">
+      {% if mala_feature %}<a class="discover-card" href="/shop/?category=malas"><div class="discover-image"><img src="{{ mala_feature.image_url }}" alt="{{ mala_feature.name }}" loading="lazy" width="600" height="600"></div><div class="discover-copy"><p class="eyebrow">SLOW DOWN. RECONNECT.</p><h3>A moment just for you.</h3><p>Malas for quiet reflection and daily practice.</p><span class="discover-link">Explore malas <span aria-hidden="true">↗</span></span></div></a>{% endif %}
+      {% if bracelet_feature %}<a class="discover-card" href="/shop/?category=bracelets"><div class="discover-image"><img src="{{ bracelet_feature.image_url }}" alt="{{ bracelet_feature.name }}" loading="lazy" width="600" height="600"></div><div class="discover-copy"><p class="eyebrow">CARRY WHAT MATTERS.</p><h3>Meaning, wherever you go.</h3><p>Spiritual bracelets that feel like a part of you.</p><span class="discover-link">Explore bracelets <span aria-hidden="true">↗</span></span></div></a>{% endif %}
+    </div>
+  </section>
+
+  <section class="home-gifting"><div class="gift-mark" aria-hidden="true">✧</div><div><p class="eyebrow">FOR SOMEONE WHO MEANS EVERYTHING</p><h2>A thoughtful gift.<br><em>A lasting connection.</em></h2><p>Celebrate a new beginning, a shared tradition,<br>or simply the joy of giving something meaningful.</p></div><a class="home-button" href="/shop/?category=pearls">Discover meaningful gifts <span aria-hidden="true">↗</span></a></section>
+
+  <section class="home-section home-guide" aria-labelledby="guide-title"><div class="home-guide-intro"><p class="eyebrow">A LITTLE GUIDANCE</p><h2 id="guide-title">Your journey<br>starts here.</h2><p>A few things to help you find a piece that feels right for you.</p><a class="home-text-link" href="/shop/">Find your first piece <span aria-hidden="true">↗</span></a></div><div class="home-faq"><details open><summary>Where should I begin?</summary><p>Start with how you'd like to use your piece. Explore malas for japa and reflection, bracelets for everyday wear, or individual Rudraksha beads to build your own collection.</p><a href="/shop/?category=rudraksha">Explore Rudraksha →</a></details><details><summary>How do I choose a product option?</summary><p>Some products offer different sizes or finishes. Open the product page and choose an available option to see its price before adding it to your cart.</p></details><details><summary>Can I save something for later?</summary><p>Tap the heart on a product to add it to your wishlist. Your selection is saved in this browser, so you can return to it while you explore.</p></details></div></section>
+</main>
+{% endblock %}

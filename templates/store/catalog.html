@@ -1,0 +1,42 @@
+{% extends 'base.html' %}{% load static money %}
+{% block title %}{{ collection_name }} Collection | ASTROL{% endblock %}
+{% block nav_rudraksha %}{% if selected == 'rudraksha' %}active{% endif %}{% endblock %}
+{% block content %}
+<section class="rudra-hero{% if selected != 'rudraksha' %} category-hero{% endif %}" aria-labelledby="collection-title">
+  <div class="rudra-text">
+    <p class="eyebrow">ROOTED IN TRADITION · CHOSEN WITH CARE</p>
+    <h1 id="collection-title">{{ collection_name }} Collection</h1>
+    <h2>{% if selected == 'rudraksha' %}Sacred Beads. Infinite Blessings.{% else %}A little closer to the sacred.{% endif %}</h2>
+    <div class="hero-trust"><div><svg class="ui-icon"><use href="#icon-shield"/></svg><small>Authentic selections</small></div><div><svg class="ui-icon"><use href="#icon-gem"/></svg><small>Lab certified</small></div><div><svg class="ui-icon"><use href="#icon-truck"/></svg><small>Worldwide shipping</small></div></div>
+  </div>
+  {% if selected == 'rudraksha' %}<div class="rudra-hero-image" role="img" aria-label="Natural Rudraksha beads from the ASTROL collection"></div>{% elif collection_cover %}<div class="category-hero-photo"><img src="{{ collection_cover.image_url }}" alt="{{ collection_cover.name }}"></div>{% else %}<div class="category-hero-intro"><p>{{ collection_description }}</p></div>{% endif %}
+  <blockquote>“A little closer<br>to what<br>matters.”<i></i></blockquote>
+</section>
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span><span aria-current="page">{{ collection_name }}</span></nav>
+<div class="collection-layout">
+  <aside class="filters">
+    <details class="filter-panel" open>
+      <summary>Filter by <span class="filter-hint">Refine your selection</span></summary>
+      <form id="collection-filters" action="/shop/#main-content" method="get">
+        {% if q %}<input type="hidden" name="q" value="{{ q }}">{% endif %}
+        <p class="filter-auto-note" hidden>Results update when you select a filter.</p>
+        <details class="filter-group" open><summary>Collection</summary><div class="collection-options"><label><input type="radio" name="category" value="all" {% if selected == 'all' %}checked{% endif %}> All products</label>{% for category in categories %}<label><input type="radio" name="category" value="{{ category.slug }}" {% if category.slug == selected %}checked{% endif %}> {{ category.name }}</label>{% endfor %}</div></details>
+        {% if origins %}<details class="filter-group" open><summary>Origin</summary>{% for origin in origins %}<label><input type="checkbox" name="origin" value="{{ origin }}" {% if origin in selected_origins %}checked{% endif %}> {{ origin|default:'Unspecified' }}</label>{% empty %}<p class="filter-note">No origins available yet.</p>{% endfor %}</details>{% endif %}
+        <details class="filter-group" open><summary>Price</summary><label><input type="radio" name="price" value="" {% if not price_filter %}checked{% endif %}> All prices</label><label><input type="radio" name="price" value="under-3000" {% if price_filter == 'under-3000' %}checked{% endif %}> Under {% money 3000 %}</label><label><input type="radio" name="price" value="3000-7000" {% if price_filter == '3000-7000' %}checked{% endif %}> {% money 3000 %} – {% money 7000 %}</label><label><input type="radio" name="price" value="over-7000" {% if price_filter == 'over-7000' %}checked{% endif %}> Above {% money 7000 %}</label><p class="filter-note">Based on the displayed starting price.</p></details>
+        <details class="filter-group" open><summary>Mukhi (faces)</summary><div class="mukhi-options">{% for mukhi in mukhis %}<label><input type="checkbox" name="mukhi" value="{{ mukhi }}" {% if mukhi in selected_mukhis %}checked{% endif %}><span>{{ mukhi }}</span></label>{% endfor %}</div></details>
+        <details class="filter-group" open><summary>Availability</summary><label><input type="radio" name="availability" value="" {% if not availability %}checked{% endif %}> All listings</label><label><input type="radio" name="availability" value="available" {% if availability == 'available' %}checked{% endif %}> Available products</label><label><input type="radio" name="availability" value="sold-out" {% if availability == 'sold-out' %}checked{% endif %}> Sold out</label><label><input type="radio" name="availability" value="sample" {% if availability == 'sample' %}checked{% endif %}> Sample products</label></details>
+        <button class="apply-filters" type="submit">Apply filters</button><a class="clear-filters" href="/shop/#main-content">Clear all</a>
+      </form>
+    </details>
+    <div class="certificate-card"><img src="{% static 'images/exact/certificate-card.jpg' %}" alt="ASTROL authenticity certificate illustration"><div><span>A sacred connection.<br>A thoughtful selection.</span><small>Discover your Rudraksha.</small></div></div>
+  </aside>
+  <main id="main-content" class="collection-main">
+    <div class="collection-head"><div><p class="eyebrow">THE ASTROL SELECTION</p><h2>{{ collection_name }} <small>{{ product_count }} products</small></h2></div><div class="sort-control"><label for="sort-order">Sort by</label><select id="sort-order" name="sort" form="collection-filters"><option value="featured" {% if sort == 'featured' %}selected{% endif %}>Featured</option><option value="price-asc" {% if sort == 'price-asc' %}selected{% endif %}>Price: low to high</option><option value="price-desc" {% if sort == 'price-desc' %}selected{% endif %}>Price: high to low</option><option value="name" {% if sort == 'name' %}selected{% endif %}>Name: A–Z</option></select></div></div>
+    {% if active_filters %}<div class="active-filters" aria-label="Applied filters">{% for filter in active_filters %}<a class="filter-chip" href="{{ filter.url }}" aria-label="Remove filter: {{ filter.label }}">{{ filter.label }} <span aria-hidden="true">×</span></a>{% endfor %}<a class="reset-all-filters" href="/shop/#main-content">Clear all</a></div>{% endif %}
+    <p class="filter-results-status" role="status" aria-live="polite">{% if has_filters %}{{ product_count }} matching product{{ product_count|pluralize }}{% else %}Showing all {{ product_count }} products{% endif %}</p>
+    <div class="product-grid exact-grid">{% for p in products %}{% include 'store/product_card.html' %}{% empty %}<div class="collection-empty"><h3>No products found</h3><p>No products match this combination. Remove a filter above or start again.</p><a href="/shop/#main-content">Clear filters and view all products →</a></div>{% endfor %}</div>
+    {% if page_obj.has_other_pages %}<nav class="pagination" aria-label="Collection pages">{% if page_obj.has_previous %}<a href="?{{ page_query }}&page={{ page_obj.previous_page_number }}#main-content">← Previous</a>{% endif %}<span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} · {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ product_count }}</span>{% if page_obj.has_next %}<a href="?{{ page_query }}&page={{ page_obj.next_page_number }}#main-content">Next →</a>{% endif %}</nav>{% endif %}
+    <p class="collection-end">Thoughtfully selected. Rooted in India's spiritual heritage.</p>
+  </main>
+</div>
+{% endblock %}

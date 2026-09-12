@@ -1,0 +1,4 @@
+{% if store_contact.support_email %}<a href="mailto:{{ store_contact.support_email }}">{{ store_contact.support_email }}</a>{% endif %}
+{% if store_contact.whatsapp_number %}<a href="tel:+{{ store_contact.whatsapp_number }}">Phone: +{{ store_contact.whatsapp_number }}</a>{% endif %}
+{% if store_contact.secondary_phone_number %}<a href="tel:+{{ store_contact.secondary_phone_number }}">Phone: +{{ store_contact.secondary_phone_number }}</a>{% endif %}
+{% if store_contact.facebook_url or store_contact.instagram_url or store_contact.youtube_url %}<div class="footer-socials">{% if store_contact.facebook_url %}<a href="{{ store_contact.facebook_url }}">Facebook</a>{% endif %}{% if store_contact.instagram_url %}<a href="{{ store_contact.instagram_url }}">Instagram</a>{% endif %}{% if store_contact.youtube_url %}<a href="{{ store_contact.youtube_url }}">YouTube</a>{% endif %}</div>{% endif %}

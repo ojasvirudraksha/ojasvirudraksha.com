@@ -1,0 +1,32 @@
+{% extends 'base.html' %}{% load static product_content money %}
+{% block title %}{{ product.name }} | ASTROL{% endblock %}
+{% block content %}
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>›</span><a href="/shop/?category={{ product.category.slug }}">{{ product.category.name }}</a><span>›</span><span>{{ product.name|cut:"Astrol " }}</span></nav>
+<main id="main-content">
+<section class="detail-page">
+  <div class="detail-photo"><img src="{{ product.image_url }}" alt="{{ product.name }}"></div>
+  <div class="detail-copy">
+    <div class="small-brand">ASTROL · {{ product.category.name|upper }}</div>
+    <h1>{{ product.name|cut:"Astrol " }}</h1>
+    {% if product.is_sample %}<p class="sample-notice"><strong>Sample product</strong><br>Illustrative image and price only. This product is not available to purchase.</p>{% endif %}
+    <div class="detail-price">{% if product.is_sample %}<small>Sample price</small> {% endif %}<span id="variant-price">{% if product.price > 0 %}{% money product.price %}{% else %}Price unavailable{% endif %}</span></div>
+    <p>{{ product.short_description }}</p>
+    <div class="detail-features">
+      {% if product.origin %}<div><b>Origin</b><span>{{ product.origin }}</span></div>{% endif %}
+      <div><b>Collection</b><span>{{ product.category.name }}</span></div>
+      {% if product.size %}<div><b>Size</b><span>{{ product.size }}</span></div>{% endif %}
+    </div>
+    {% if product.can_purchase %}
+    <form method="post" action="{% url 'add_to_cart' product.id %}" class="detail-purchase">{% csrf_token %}
+      <input type="hidden" name="next" value="{{ product.get_absolute_url }}">
+      {% if variants %}<label for="product-variant">Choose an option</label><select name="variant" id="product-variant">{% for variant in variants %}<option value="{{ variant.id }}" data-price="{% money variant.price %}" {% if variant == selected_variant %}selected{% endif %} {% if not variant.can_purchase %}disabled{% endif %}>{% if variant.name == 'Default Title' %}Standard{% else %}{{ variant.name }}{% endif %} — {% money variant.price %}{% if not variant.can_purchase %} (Sold out){% endif %}</option>{% endfor %}</select>{% endif %}
+      <button type="submit" class="detail-cart">Add to Cart</button>
+    </form>
+    {% else %}<button type="button" class="detail-cart" disabled>{% if product.is_sample %}Sample — not for sale{% else %}Currently unavailable{% endif %}</button>{% endif %}
+    <div class="delivery-box">Worldwide shipping · Thoughtfully selected by ASTROL</div>
+    <div class="product-description"><h2>About this product</h2>{% for section in product.description|description_sections %}<div class="description-section">{% if section.heading %}<h3>{{ section.heading }}</h3>{% endif %}{{ section.body|linebreaks }}</div>{% endfor %}</div>
+  </div>
+</section>
+{% if related %}<section class="related-products"><h2>More from {{ product.category.name }}</h2><div class="product-grid exact-grid">{% for p in related %}{% include 'store/product_card.html' %}{% endfor %}</div></section>{% endif %}
+</main>
+{% endblock %}

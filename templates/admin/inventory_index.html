@@ -1,0 +1,14 @@
+{% extends "admin/index.html" %}
+{% block content %}
+{% if inventory_stats %}
+<section class="inventory-welcome"><p class="admin-eyebrow">YOUR STORE, AT A GLANCE</p><h2>Welcome to your inventory.</h2><p>Manage your ASTROL catalog, product options and stock from one place.</p><div class="inventory-actions">{% if perms.store.add_product %}<a class="admin-primary" href="{% url 'admin:store_product_add' %}">+ Add a product</a>{% endif %}<a href="{% url 'admin:store_product_changelist' %}">Manage products →</a>{% if perms.store.view_customerprofile %}<a href="{% url 'admin:store_customerprofile_changelist' %}">Manage customers →</a>{% endif %}<a href="/" target="_blank" rel="noopener">Open customer storefront ↗</a></div></section>
+<div class="inventory-stats">
+  <a href="{% url 'admin:store_product_changelist' %}"><span>Products</span><strong>{{ inventory_stats.products }}</strong><small>Complete catalog</small></a>
+  <a href="{% url 'admin:store_product_changelist' %}?active__exact=1"><span>Published</span><strong>{{ inventory_stats.published }}</strong><small>Visible to customers</small></a>
+  <a href="{% url 'admin:store_product_changelist' %}?stock_status=low"><span>Low stock</span><strong>{{ inventory_stats.low_stock }}</strong><small>Products with 1–5 units</small></a>
+  <a href="{% url 'admin:store_product_changelist' %}?stock_status=untracked"><span>Stock to set up</span><strong>{{ inventory_stats.untracked }}</strong><small>Products with untracked stock</small></a>
+</div>
+<div class="inventory-guidance"><h3>Start managing stock</h3><ol><li>Open a product to edit its details, photo, price and visibility.</li><li>For products with options, enter quantities in the variant rows or open <a href="{% url 'admin:store_productvariant_changelist' %}">Variant stock</a> to edit multiple rows and save.</li><li>A blank quantity means not tracked. Enter <strong>0</strong> for sold out. Enter the actual quantity to limit what customers can add to their cart.</li></ol><p>Cart additions do not reserve or deduct inventory. Checkout and order processing are not connected yet.</p></div>
+{% endif %}
+{{ block.super }}
+{% endblock %}

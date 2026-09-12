@@ -1,0 +1,2 @@
+{% extends 'accounts/layout.html' %}
+{% block account_content %}<h2>My profile</h2><p>Keep your name and contact number up to date.</p><p class="account-note"><strong>Email address</strong><br>{{ user.email }}<br><small>Your email is your sign-in ID. Contact the store administrator if it needs to change.</small></p><form method="post" class="account-form">{% csrf_token %}{% include 'accounts/fields.html' %}<button class="account-button" type="submit">Save profile</button></form>{% endblock %}

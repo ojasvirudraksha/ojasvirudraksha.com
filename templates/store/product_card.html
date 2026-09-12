@@ -1,0 +1,14 @@
+{% load static money %}
+<article class="product-card{% if p.source_id or p.is_sample %} catalog-photo{% endif %}">
+  <div class="photo-wrap">
+    <a href="{{ p.get_absolute_url }}"><img loading="lazy" src="{{ p.image_url }}" alt="{{ p.name }}"></a>
+    {% if p.is_sample %}<span class="product-badge">Sample product</span>{% elif not p.can_purchase %}<span class="product-badge">Sold out</span>{% endif %}
+    <button class="heart" type="button" data-wishlist="{{ p.id }}" data-name="{{ p.name }}" aria-label="Save {{ p.name }} to wishlist" aria-pressed="false"><svg class="ui-icon" aria-hidden="true"><use href="#icon-heart"/></svg></button>
+  </div>
+  <div class="product-copy">
+    <a class="product-title" href="{{ p.get_absolute_url }}">{{ p.name|cut:"Astrol " }}</a>
+    <div class="product-meta">{% if p.origin %}{{ p.origin }} · {% endif %}{{ p.category.name }}</div>
+    <div class="product-price">{% if p.is_sample %}<small>Sample price</small> {% elif p.has_options %}<small>From</small> {% endif %}{% if p.price > 0 %}{% money p.price %}{% else %}<small>Price unavailable</small>{% endif %}</div>
+  </div>
+  {% if p.is_sample %}<a href="{{ p.get_absolute_url }}" class="cart-btn secondary-btn">View sample</a>{% elif not p.can_purchase %}<a href="{{ p.get_absolute_url }}" class="cart-btn secondary-btn">View details</a>{% elif p.has_options %}<a href="{{ p.get_absolute_url }}" class="cart-btn">Choose options</a>{% else %}<form action="{% url 'add_to_cart' p.id %}" method="post" class="card-cart-form">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button type="submit" class="cart-btn">Add to Cart</button></form>{% endif %}
+</article>

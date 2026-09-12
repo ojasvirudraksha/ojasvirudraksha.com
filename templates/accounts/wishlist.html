@@ -1,0 +1,2 @@
+{% extends 'accounts/layout.html' %}
+{% block account_content %}<div data-wishlist-page><h2>My wishlist</h2><p>Saved to your account, ready whenever you return.</p><div class="product-grid account-wishlist">{% for p in products %}{% include 'store/product_card.html' %}{% empty %}<div class="account-empty"><h3>Make room for your favourites.</h3><p>Tap the heart on any product to save it here.</p><a href="/shop/">Explore the collection →</a></div>{% endfor %}</div></div>{% endblock %}

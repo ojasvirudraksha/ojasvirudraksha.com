@@ -1,0 +1,2 @@
+{% extends 'accounts/auth_layout.html' %}
+{% block auth_content %}<p class="eyebrow">BEGIN YOUR JOURNEY</p><h2>Create your account</h2><p>Keep your favourites and details in one place.</p><form method="post" class="account-form">{% csrf_token %}<input type="hidden" name="next" value="{{ next }}">{% include 'accounts/fields.html' %}<button class="account-button" type="submit">Create account</button></form><p class="auth-switch">Already have an account? <a href="{% url 'account_login' %}">Sign in</a></p>{% endblock %}

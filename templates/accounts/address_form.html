@@ -1,0 +1,2 @@
+{% extends 'accounts/layout.html' %}
+{% block account_content %}<h2>{% if editing %}Edit address{% else %}Add an address{% endif %}</h2><form method="post" class="account-form address-form">{% csrf_token %}{% include 'accounts/fields.html' %}<div class="form-actions"><button class="account-button" type="submit">Save address</button><a href="{% url 'account_addresses' %}">Cancel</a></div></form>{% endblock %}

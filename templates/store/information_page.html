@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}{{ info.title }} | ASTROL{% endblock %}
+{% block content %}
+<main id="main-content" class="help-page">
+  <header class="help-heading"><p class="eyebrow">ASTROL · HERE TO HELP</p><h1>{{ info.title }}</h1><p>{{ info.intro }}</p></header>
+  <div class="help-layout"><nav class="help-nav" aria-label="Help pages"><a href="{% url 'contact_us' %}">Contact Us</a>{% for slug, title in help_links %}<a href="{% url 'information_page' slug %}" {% if info.slug == slug %}aria-current="page"{% endif %}>{{ title }}</a>{% endfor %}</nav>
+  <article class="help-content">{% if info.needs_confirmation %}<p class="policy-status">Policy details are being finalized. Please confirm the applicable terms with ASTROL before arranging a purchase.</p>{% endif %}
+  {% load help_content %}{% for section in info.body|help_sections %}{% if info.slug == 'faqs' %}<details class="help-faq"><summary>{{ section.heading }}</summary>{{ section.body|linebreaks }}</details>{% else %}<section><h2>{{ section.heading }}</h2>{{ section.body|linebreaks }}</section>{% endif %}{% endfor %}
+  <a class="help-button" href="{% url 'contact_us' %}">Contact ASTROL →</a></article></div>
+</main>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}ASTROL{% endblock %}</title>
+{% block extra_head %}{% endblock %}
+<link rel="stylesheet" href="{% static 'css/site.css' %}?v=footer-help-1">
+<link rel="stylesheet" href="{% static 'css/om-background.css' %}?v=2">
+</head>
+<body data-customer-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true"><defs>
+<symbol id="icon-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></symbol>
+<symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></symbol>
+<symbol id="icon-cart" viewBox="0 0 24 24"><path d="M2 3h3l3 13h11l3-10H6"/><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/></symbol>
+<symbol id="icon-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></symbol>
+<symbol id="icon-shield" viewBox="0 0 24 24"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6Z"/><path d="m8 12 3 3 5-6"/></symbol>
+<symbol id="icon-gem" viewBox="0 0 24 24"><path d="m3 8 4-5h10l4 5-9 14Z M3 8h18 M7 3l5 19 5-19"/></symbol>
+<symbol id="icon-truck" viewBox="0 0 24 24"><path d="M1 4h14v13H1Z M15 9h5l3 5v3h-8"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></symbol>
+</defs></svg>
+<div class="topbar">
+  <div>✈ <span>Worldwide Shipping</span></div>
+  <div>♢ <span>100% Authentic Products</span></div>
+  <div>▤ <span>Lab Certified</span></div>
+  <div>◇ <span>Direct from Manufacturer</span></div>
+  <div class="heritage">India's Spiritual Heritage, For a Better Tomorrow</div>
+</div>
+
+{% include 'store/country_selector.html' %}
+
+{% block storefront_header %}
+<header class="main-header">
+  <a href="/" class="logo-wrap"><img src="{% static 'images/exact/logo.png' %}" alt="ASTROL"></a>
+  <form action="/shop/" class="main-search">
+    <input type="text" aria-label="Search products" name="q" value="{{ q|default:'' }}" placeholder="Search for Rudraksha, Gemstones, Malas, Rings...">
+    <button aria-label="Search"><svg class="ui-icon"><use href="#icon-search"/></svg></button>
+  </form>
+  <div class="header-actions">
+    <a class="action" id="account-button" href="{% url 'account_dashboard' %}"><svg class="ui-icon"><use href="#icon-user"/></svg><small>{% if user.is_authenticated %}My account{% else %}Account{% endif %}</small></a>
+    {% if user.is_authenticated %}<a class="action" id="wishlist-button" href="{% url 'account_wishlist' %}"><svg class="ui-icon"><use href="#icon-heart"/></svg><small>Wishlist <span id="wishlist-count">{{ customer_wishlist|length }}</span></small></a>{% else %}<button type="button" class="action" id="wishlist-button"><svg class="ui-icon"><use href="#icon-heart"/></svg><small>Wishlist <span id="wishlist-count">0</span></small></button>{% endif %}
+    <a href="/cart/" class="action cart-action"><svg class="ui-icon"><use href="#icon-cart"/></svg><b>{{ cart_count }}</b><small>Cart</small></a>
+  </div>
+</header>
+
+<nav class="main-nav" aria-label="Main navigation"><a href="/" {% if selected == 'home' %}class="active" aria-current="page"{% endif %}>Home</a><a href="/shop/" {% if selected == 'all' %}class="active"{% endif %}>All products</a>{% for category in nav_categories %}<a href="/shop/?category={{ category.slug }}" {% if selected == category.slug %}class="active"{% endif %}>{{ category.name }}</a>{% endfor %}</nav>
+{% endblock %}
+
+{% if messages %}<div class="store-messages" role="status">{% for message in messages %}<p>{{ message }}{% if 'cart' in message.tags %} <a href="/cart/">View cart →</a>{% endif %}</p>{% endfor %}</div>{% endif %}
+{% block content %}{% endblock %}
+
+<section class="benefit-strip">
+  <div><span>♢</span><p><b>Authentic & Lab Certified</b><small>Every product is verified for purity and authenticity.</small></p></div>
+  <div><span>◎</span><p><b>Worldwide Shipping</b><small>Spreading spiritual wellness globally.</small></p></div>
+  <div><span>▭</span><p><b>Secure Payments</b><small>Your transactions are safe with us.</small></p></div>
+  <div><span>♧</span><p><b>Dedicated Support</b><small>We're here to help you always.</small></p></div>
+  <div class="script">Ancient Wisdom. Modern Life.</div>
+</section>
+
+<footer class="site-footer help-footer">
+  <div class="footer-brand"><a href="/"><img src="{% static 'images/exact/logo.png' %}" alt="ASTROL" width="225"></a><p>Ancient wisdom.<br><em>For your everyday journey.</em></p><small>Thoughtfully chosen spiritual essentials,<br>rooted in India's timeless traditions.</small></div>
+  <nav class="footer-column" aria-label="Quick links"><h2>Quick links</h2><a href="/shop/">All products</a><a href="/shop/?category=rudraksha">Rudraksha</a><a href="/shop/?category=malas">Malas</a><a href="/shop/?category=bracelets">Bracelets</a><a href="/shop/?category=gemstones">Gemstones</a><a href="{% url 'account_dashboard' %}">My account</a><a href="/cart/">Shopping cart</a></nav>
+  <nav class="footer-column" aria-label="Help"><h2>Help</h2><a href="/shop/">Search</a>{% for slug, title in help_links %}<a href="{% url 'information_page' slug %}">{{ title }}</a>{% endfor %}</nav>
+  <div class="footer-column footer-contact"><h2>Contact us</h2><p>Need a little guidance?<br>Leave a question for the ASTROL team.</p><a href="{% url 'contact_us' %}">Contact ASTROL →</a>{% include 'store/contact_links.html' %}</div>
+  <div class="footer-newsletter"><div><span class="eyebrow">THE ASTROL LETTER</span><h2>Stay inspired. Stay connected.</h2><p>Sign up for future collection news and thoughtful updates.</p></div><form method="post" action="{% url 'newsletter_subscribe' %}">{% csrf_token %}<label for="footer-newsletter-email">Your email address</label><div class="newsletter-input"><input type="email" name="email" id="footer-newsletter-email" placeholder="you@example.com" autocomplete="email" maxlength="254" required><button type="submit">Subscribe →</button></div><label class="newsletter-consent"><input type="checkbox" name="consent" required> I would like to receive ASTROL news and updates by email.</label><small>Read our <a href="{% url 'information_page' 'privacy-policy' %}">Privacy Policy</a>. Request removal through <a href="{% url 'contact_us' %}">Contact Us</a>.</small></form></div>
+  <div class="footer-bottom"><small>© {% now "Y" %} ASTROL. All rights reserved.</small><span>India's Spiritual Heritage, For a Better Tomorrow.</span><small>Made with intention. Inspired by tradition.</small></div>
+</footer>
+
+<dialog id="wishlist-dialog"><div class="dialog-heading"><h2>Your wishlist</h2><button type="button" data-close-dialog aria-label="Close wishlist">×</button></div><p class="filter-note">Saved in this browser for your next visit.</p><div id="wishlist-items"></div></dialog>
+{{ customer_wishlist|json_script:"customer-wishlist-data" }}
+<div id="wishlist-csrf" hidden>{% csrf_token %}</div>
+<p id="wishlist-status" class="sr-only" role="status" aria-live="polite"></p>
+<script src="{% static 'js/site.js' %}?v=signin-header-1" defer></script>
+</body>
+</html>
