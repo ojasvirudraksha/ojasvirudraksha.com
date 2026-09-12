@@ -1,6 +1,6 @@
 # Ojasvi Rudraksha
 
-A Django storefront with a product catalog, cart, customer accounts, wishlists and an admin portal. Checkout and payments are not implemented yet.
+A Django storefront with a product catalog, cart, customer accounts, wishlists and an admin portal. Signed-in carts are saved to the account and restored after logout or on another device. Guest items merge into the account on login. Checkout and payments are not implemented yet.
 
 ## Run locally
 
