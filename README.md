@@ -18,6 +18,22 @@ To use another port, change `OJASVIRUDRAKSHA_PORT` in `.env`. Docker Compose rea
 and passes the settings to each service. Keep `.env` private; it is excluded from Git
 and the Docker image.
 
+For a public HTTPS domain, configure the **server's** `.env`:
+
+```dotenv
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,rundra.online,www.rundra.online
+DJANGO_CSRF_TRUSTED_ORIGINS=https://rundra.online,https://www.rundra.online
+```
+
+Allowed hosts are bare hostnames; trusted CSRF origins include `https://` with no
+trailing slash or path. Deploy the updated `ojasvirudraksha/settings.py` as well as
+editing `.env` so Django reads the CSRF setting. Rebuild and recreate the web container;
+a restart alone does not reload `.env`:
+
+```sh
+docker-compose up --build -d --no-deps --force-recreate web
+```
+
 ## Create an admin
 
 Once the app is running:
