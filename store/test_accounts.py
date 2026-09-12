@@ -45,6 +45,20 @@ class CustomerAccountTests(TestCase):
         self.assertRedirects(self.client.post('/account/logout/'), '/account/login/')
         self.assertEqual(self.client.get('/account/profile/').status_code, 302)
 
+    def test_staff_account_cannot_login_to_customer_portal(self):
+        staff_user = get_user_model().objects.create_user(username='admin-customer@example.com', email='admin-customer@example.com', password=self.password, is_staff=True, is_superuser=False)
+        response = self.client.post('/account/login/', {'username': staff_user.email, 'password': self.password})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Use the admin portal for staff accounts.', response.context['form'].non_field_errors())
+        self.assertNotIn('_auth_user_id', self.client.session)
+
+    def test_staff_session_is_rejected_by_customer_routes(self):
+        staff_user = get_user_model().objects.create_user(username='staff-only@example.com', email='staff-only@example.com', password=self.password, is_staff=True, is_superuser=False)
+        self.client.force_login(staff_user)
+        response = self.client.get('/account/', follow=True)
+        self.assertRedirects(response, '/account/login/')
+        self.assertNotIn('_auth_user_id', self.client.session)
+
     def test_login_throttles_repeated_failures(self):
         for _ in range(10):
             self.client.post('/account/login/', {'username': 'river@example.com', 'password': 'wrong'})

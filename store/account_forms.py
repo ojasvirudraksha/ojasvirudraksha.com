@@ -47,6 +47,11 @@ class CustomerLoginForm(AuthenticationForm):
     def clean_username(self):
         return self.cleaned_data['username'].strip().lower()
 
+    def confirm_login_allowed(self, user):
+        if user.is_staff or user.is_superuser:
+            raise forms.ValidationError('Use the admin portal for staff accounts.')
+        super().confirm_login_allowed(user)
+
 
 class CustomerProfileForm(forms.Form):
     first_name = forms.CharField(label='First name', max_length=150)
