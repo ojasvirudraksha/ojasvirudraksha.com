@@ -1,46 +1,30 @@
 name: ojasvirudraksha
 services:
   web:
-    container_name: ojasvirudraksha-web
-    restart: unless-stopped
     build: .
     ports:
       - "127.0.0.1:${ASTROL_PORT:-8000}:8000"
-    environment:
-      DJANGO_DEBUG: "true"
-      DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
-      DJANGO_DB_PATH: /data/db.sqlite3
+    env_file: .env
+    depends_on:
+      mysql:
+        condition: service_healthy
     volumes:
-      - database:/data
       - local_state:/app/.local
       - uploads:/app/media
+
+  mysql:
+    image: mysql:8.4
+    env_file: .env
+    volumes:
+      - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/account/login/', timeout=5)"]
-      interval: 15s
-      timeout: 6s
-      start_period: 120s
-      retries: 3
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./astrol
-          target: /app/astrol
-        - action: sync+restart
-          path: ./store
-          target: /app/store
-        - action: sync
-          path: ./templates
-          target: /app/templates
-        - action: sync
-          path: ./static
-          target: /app/static
-        - action: rebuild
-          path: ./requirements.txt
-        - action: rebuild
-          path: ./docker
-        - action: rebuild
-          path: ./Dockerfile
+      test: ["CMD-SHELL", "MYSQL_PWD=$$MYSQL_PASSWORD mysql --protocol=TCP -h 127.0.0.1 -u $$MYSQL_USER $$MYSQL_DATABASE -e 'SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
 volumes:
-  database:
+  mysql_data:
   local_state:
   uploads:
