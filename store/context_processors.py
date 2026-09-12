@@ -1,8 +1,9 @@
 from .models import Category
+from .cart_storage import get_cart
 
 
 def cart_count(request):
-    cart = request.session.get("cart", {})
+    cart = get_cart(request)
     return {"cart_count": sum(qty for qty in cart.values() if isinstance(qty, int) and qty > 0),
             "nav_categories": Category.objects.all()}
 

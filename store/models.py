@@ -105,6 +105,7 @@ class ProductVariant(models.Model):
 class CustomerProfile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='customer_profile')
     phone = models.CharField(max_length=25, blank=True)
+    cart = models.JSONField(default=dict, blank=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -1,3 +1,4 @@
+from .cart_storage import persistent_cart
 from decimal import Decimal
 import re
 
@@ -138,6 +139,7 @@ def product_detail(request, slug):
 
 
 @require_POST
+@persistent_cart
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product.objects.prefetch_related("variants"), id=product_id, active=True)
     if not product.can_purchase:
@@ -171,6 +173,7 @@ def add_to_cart(request, product_id):
     return redirect(next_url)
 
 
+@persistent_cart
 def cart(request):
     raw = request.session.get("cart", {})
     items = []
@@ -206,6 +209,7 @@ def cart(request):
 
 
 @require_POST
+@persistent_cart
 def remove_from_cart(request, product_key):
     cart = request.session.get("cart", {})
     cart.pop(product_key, None)
