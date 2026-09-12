@@ -7,17 +7,17 @@ This version rebuilds the local website to closely match the Astrol Rudraksha mo
 Build and start the application:
 
 ```bash
-docker-compose up -d --build
+docker-compose up --build -d --wait
 ```
 
-Open http://127.0.0.1:8000/. Migrations and the repeatable catalog seed/import run
-automatically when the `web` container starts. View logs with
-`docker-compose logs -f web` and stop the application with `docker-compose down`.
+Open http://127.0.0.1:8000/. Migrations and the catalog bootstrap run automatically
+when the `web` container starts. View logs with `docker-compose logs -f web` and
+stop the application with `docker-compose down`.
 
 ## Fresh setup
 
 ```bash
-docker-compose up -d --build
+docker-compose up --build -d --wait
 ```
 
 The product-photo assets in `static/images/exact/` were extracted from the Astrol mockup approved by the project owner, so the local page visually matches that approved concept.
@@ -196,12 +196,11 @@ These forms do not send email or start marketing campaigns. Newsletter consent i
 Install/start Docker Desktop (or Docker Engine with Compose). From this folder:
 
 ```sh
-docker compose up --build -d --wait
+docker-compose up --build -d --wait
 ```
 
-Open **http://127.0.0.1:8001/** (admin: `/admin/`). Port 8001 leaves the existing
-non-Docker server on port 8000 untouched. Optionally copy `.env.example` to `.env`
-and change `ASTROL_PORT`.
+Open **http://127.0.0.1:8000/** (admin: `/admin/`). Optionally copy `.env.example`
+to `.env` and change `ASTROL_PORT` if another host port is needed.
 
 First startup runs migrations and loads all 433 catalog listings into a **separate**
 SQLite database. Existing catalog entries are never reseeded on restart. Existing
@@ -209,8 +208,8 @@ host customer accounts, contact settings, uploaded files and admin edits are not
 imported. Create a container administrator and refresh currency rates with:
 
 ```sh
-docker compose exec web python manage.py createsuperuser
-docker compose exec web python manage.py refresh_exchange_rates
+docker-compose exec web python manage.py createsuperuser
+docker-compose exec web python manage.py refresh_exchange_rates
 ```
 
 Until rates are fetched, currency display falls back to INR. Contact details can be
@@ -219,10 +218,10 @@ entered in the container's admin under Store contacts.
 Useful commands:
 
 ```sh
-docker compose logs -f web
-docker compose exec web python manage.py test store
-docker compose down
-docker compose up --build --watch
+docker-compose logs -f web
+docker-compose exec web python manage.py test store
+docker-compose down
+docker-compose up --build --watch
 ```
 
 Watch mode syncs source/templates/assets and restarts after Python changes; dependency
@@ -230,7 +229,7 @@ changes rebuild the image. Requires Docker Compose 2.23+ for sync-and-restart.
 Normal `up --build` is available without watch mode.
 
 Named volumes persist SQLite (`database`), uploads (`uploads`), and secrets/rate cache/
-file-based email (`local_state`). `docker compose down` preserves them; **adding `-v`
+file-based email (`local_state`). `docker-compose down` preserves them; **adding `-v`
 deletes the container's saved data**. The image excludes the host database, `.local`,
 `.env`, uploads and credentials. The application runs as a non-root user. This is a
 local development setup using Django's development server, with access bound to

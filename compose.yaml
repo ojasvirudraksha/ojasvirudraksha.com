@@ -1,9 +1,11 @@
-name: astrol
+name: ojasvirudraksha
 services:
   web:
+    container_name: ojasvirudraksha-web
+    restart: unless-stopped
     build: .
     ports:
-      - "127.0.0.1:${ASTROL_PORT:-8001}:8000"
+      - "127.0.0.1:${ASTROL_PORT:-8000}:8000"
     environment:
       DJANGO_DEBUG: "true"
       DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
