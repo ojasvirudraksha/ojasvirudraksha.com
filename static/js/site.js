@@ -76,6 +76,8 @@
       const active = Boolean(saved[button.dataset.wishlist]);
       button.setAttribute('aria-pressed', String(active));
       button.setAttribute('aria-label', `${active ? 'Remove' : 'Save'} ${button.dataset.name} ${active ? 'from' : 'to'} wishlist`);
+      const label = button.querySelector('[data-wishlist-label]');
+      if (label) label.textContent = active ? 'Saved to wishlist' : 'Add to wishlist';
     });
     const items = document.querySelector('#wishlist-items');
     if (!items) return;
@@ -100,7 +102,9 @@
     }).catch(() => { status.textContent = 'Your browser favourites could not be synced. Please refresh to retry.'; });
   }
   document.querySelectorAll('[data-wishlist]').forEach(button => button.addEventListener('click', async () => {
-    button.disabled = true;
+    const matchingButtons = Array.from(document.querySelectorAll('[data-wishlist]')).filter(item => item.dataset.wishlist === button.dataset.wishlist);
+    matchingButtons.forEach(item => { item.disabled = true; });
+    const feedback = document.querySelector('[data-wishlist-feedback]');
     try {
       await mergeComplete;
       const id = button.dataset.wishlist;
@@ -108,14 +112,18 @@
       if (authenticated) await updateServer(wasSaved ? 'remove' : 'add', id);
       else {
         if (wasSaved) delete saved[id];
-        else saved[id] = {name: button.dataset.name, url: button.closest('.product-card').querySelector('.product-title').getAttribute('href')};
+        else saved[id] = {name: button.dataset.name, url: button.dataset.productUrl || button.closest('.product-card').querySelector('.product-title').getAttribute('href')};
         persistGuest();
       }
       render();
       status.textContent = saved[id] ? `${button.dataset.name} saved to wishlist.` : `${button.dataset.name} removed from wishlist.`;
+      if (feedback) { feedback.textContent = status.textContent; feedback.hidden = false; }
       if (authenticated && document.querySelector('[data-wishlist-page]')) window.location.reload();
-    } catch (error) { status.textContent = error.message; }
-    finally { button.disabled = false; }
+    } catch (error) {
+      status.textContent = error.message;
+      if (feedback) { feedback.textContent = error.message; feedback.hidden = false; }
+    }
+    finally { matchingButtons.forEach(item => { item.disabled = false; }); }
   }));
   const dialog = document.querySelector('#wishlist-dialog');
   document.querySelector('button#wishlist-button')?.addEventListener('click', () => dialog.showModal());

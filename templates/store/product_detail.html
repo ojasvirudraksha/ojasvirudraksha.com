@@ -4,7 +4,7 @@
 <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>›</span><a href="/shop/?category={{ product.category.slug }}">{{ product.category.name }}</a><span>›</span><span>{{ product.name|cut:"Ojasvirudraksha " }}</span></nav>
 <main id="main-content">
 <section class="detail-page">
-  <div class="detail-photo"><img src="{{ product.image_url }}" alt="{{ product.name }}"></div>
+  <div class="detail-photo"><img src="{{ product.image_url }}" alt="{{ product.name }}"><button type="button" class="detail-wishlist-heart" data-wishlist="{{ product.id }}" data-name="{{ product.name }}" data-product-url="{{ product.get_absolute_url }}" aria-label="Save {{ product.name }} to wishlist" aria-pressed="false"><svg class="ui-icon" aria-hidden="true"><use href="#icon-heart"/></svg></button></div>
   <div class="detail-copy">
     <div class="small-brand">OJASVIRUDRAKSHA · {{ product.category.name|upper }}</div>
     <h1>{{ product.name|cut:"Ojasvirudraksha " }}</h1>
@@ -23,6 +23,8 @@
       <button type="submit" class="detail-cart">Add to Cart</button>
     </form>
     {% else %}<button type="button" class="detail-cart" disabled>{% if product.is_sample %}Sample — not for sale{% else %}Currently unavailable{% endif %}</button>{% endif %}
+    <button type="button" class="detail-wishlist-button" data-wishlist="{{ product.id }}" data-name="{{ product.name }}" data-product-url="{{ product.get_absolute_url }}" aria-label="Save {{ product.name }} to wishlist" aria-pressed="false"><svg class="ui-icon" aria-hidden="true"><use href="#icon-heart"/></svg><span data-wishlist-label>Add to wishlist</span></button>
+    <p class="detail-wishlist-feedback" data-wishlist-feedback hidden></p>
     <div class="delivery-box">Worldwide shipping · Thoughtfully selected by OJASVIRUDRAKSHA</div>
     <div class="product-description"><h2>About this product</h2>{% for section in product.description|description_sections %}<div class="description-section">{% if section.heading %}<h3>{{ section.heading }}</h3>{% endif %}{{ section.body|linebreaks }}</div>{% endfor %}</div>
   </div>
