@@ -3,8 +3,8 @@ from django.db.models import Q
 from django.utils.html import format_html
 from .models import Category, Product, ProductVariant
 
-admin.site.site_header = 'ASTROL · Admin Portal'
-admin.site.site_title = 'ASTROL Administration'
+admin.site.site_header = 'OJASVIRUDRAKSHA · Admin Portal'
+admin.site.site_title = 'OJASVIRUDRAKSHA Administration'
 admin.site.index_title = 'Inventory overview'
 admin.site.index_template = 'admin/inventory_index.html'
 admin.site.site_url = '/'

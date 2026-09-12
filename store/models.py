@@ -69,7 +69,7 @@ class Product(models.Model):
 
     @property
     def image_url(self):
-        return self.uploaded_image.url if self.uploaded_image else static(self.image or "images/exact/logo.png")
+        return self.uploaded_image.url if self.uploaded_image else static(self.image or "images/ojasvirudraksha-logo.svg")
 
     def refresh_variant_price(self):
         variants = list(self.variants.all())
@@ -178,7 +178,7 @@ class StoreContact(models.Model):
     youtube_url = models.URLField(blank=True)
 
     def __str__(self):
-        return 'ASTROL contact and social links'
+        return 'OJASVIRUDRAKSHA contact and social links'
 
 
 class NewsletterSubscriber(models.Model):

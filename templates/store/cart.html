@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% load static money %}
-{% block title %}Cart | Astrol{% endblock %}
+{% block title %}Cart | Ojasvirudraksha{% endblock %}
 {% block content %}
 <div class="page-title"><h1>Your Cart</h1><p>Review your selected spiritual products.</p></div>
 <section id="main-content" class="cart-page">
@@ -8,7 +8,7 @@
     {% for item in items %}
     <div class="cart-line">
       <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
-      <div class="cart-name"><b>{{ item.product.name|cut:"Astrol " }}</b><small>{% if item.variant and item.variant.name != 'Default Title' %}{{ item.variant.name }} · {% endif %}Quantity: {{ item.qty }}</small></div>
+      <div class="cart-name"><b>{{ item.product.name|cut:"Ojasvirudraksha " }}</b><small>{% if item.variant and item.variant.name != 'Default Title' %}{{ item.variant.name }} · {% endif %}Quantity: {{ item.qty }}</small></div>
       <div class="cart-money">{% money item.display_line converted=True %}<form action="{% url 'remove_from_cart' item.key %}" method="post">{% csrf_token %}<button type="submit" class="remove-item">Remove</button></form></div>
     </div>
     {% endfor %}

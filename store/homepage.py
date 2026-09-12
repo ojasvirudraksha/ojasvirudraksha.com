@@ -3,7 +3,7 @@ from django.db.models import Q
 from .models import Category, Product
 
 COLLECTIONS = [
-    ('rudraksha', 'Rudraksha', 'Sacred beginnings', None, 'astrol-7-mukhi-rudraksha'),
+    ('rudraksha', 'Rudraksha', 'Sacred beginnings', None, 'ojasvirudraksha-7-mukhi-rudraksha'),
     ('malas', 'Malas', 'A moment of stillness', '9265956094181', None),
     ('bracelets', 'Bracelets', 'Meaning, worn daily', '9265111826661', None),
     ('tulsi-mala', 'Tulsi Mala', 'Rooted in devotion', '3883149099086', None),

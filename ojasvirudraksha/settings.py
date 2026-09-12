@@ -26,7 +26,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-ROOT_URLCONF = "astrol.urls"
+ROOT_URLCONF = "ojasvirudraksha.urls"
 TEMPLATES = [{
     "BACKEND":"django.template.backends.django.DjangoTemplates",
     "DIRS":[BASE_DIR/"templates"],
@@ -42,12 +42,12 @@ TEMPLATES = [{
         "store.help_views.footer_context",
     ]}
 }]
-WSGI_APPLICATION = "astrol.wsgi.application"
+WSGI_APPLICATION = "ojasvirudraksha.wsgi.application"
 if os.environ.get("MYSQL_HOST"):
     DATABASES = {"default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get("MYSQL_DATABASE", "astrol"),
-        "USER": os.environ.get("MYSQL_USER", "astrol"),
+        "NAME": os.environ.get("MYSQL_DATABASE", "ojasvirudraksha"),
+        "USER": os.environ.get("MYSQL_USER", "ojasvirudraksha"),
         "PASSWORD": os.environ["MYSQL_PASSWORD"],
         "HOST": os.environ["MYSQL_HOST"],
         "PORT": os.environ.get("MYSQL_PORT", "3306"),
@@ -84,4 +84,4 @@ EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "true").lower() == "true"
-DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "ASTROL <noreply@localhost>")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "OJASVIRUDRAKSHA <noreply@localhost>")

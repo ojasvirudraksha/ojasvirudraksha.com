@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 88" role="img" aria-labelledby="title">
+  <title id="title">Ojasvirudraksha</title>
+  <g fill="none" stroke="#ad813f" stroke-width="1.5">
+    <circle cx="39" cy="43" r="29"/>
+    <ellipse cx="39" cy="43" rx="12" ry="29"/>
+    <path d="M39 14v58M12 33q27 14 54 0M12 53q27-14 54 0"/>
+  </g>
+  <g fill="#654322" font-family="Georgia, serif" text-anchor="middle">
+    <text x="222" y="37" font-size="29" letter-spacing="6">OJASVI</text>
+    <text x="222" y="65" font-size="22" letter-spacing="3">RUDRAKSHA</text>
+  </g>
+</svg>

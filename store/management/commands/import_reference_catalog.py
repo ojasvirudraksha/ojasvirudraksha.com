@@ -82,7 +82,7 @@ class Command(BaseCommand):
                 'name': name, 'category': categories[category], 'image': 'images/products/'+image,
                 'price': price, 'is_sample': True, 'available': False,
                 'short_description': 'Sample product — illustrative image and price. Not available to purchase.',
-                'description': 'This sample shows how the ASTROL collection will look. The image and price are illustrative; product specifications, availability and final pricing have not been supplied.',
+                'description': 'This sample shows how the OJASVIRUDRAKSHA collection will look. The image and price are illustrative; product specifications, availability and final pricing have not been supplied.',
             })
             samples += int(new)
         self.stdout.write(self.style.SUCCESS(f'Added {created} reference products and {samples} samples. Existing products preserved.'))

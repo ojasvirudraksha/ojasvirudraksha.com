@@ -1,13 +1,13 @@
 {% extends 'base.html' %}{% load static product_content money %}
-{% block title %}{{ product.name }} | ASTROL{% endblock %}
+{% block title %}{{ product.name }} | OJASVIRUDRAKSHA{% endblock %}
 {% block content %}
-<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>›</span><a href="/shop/?category={{ product.category.slug }}">{{ product.category.name }}</a><span>›</span><span>{{ product.name|cut:"Astrol " }}</span></nav>
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>›</span><a href="/shop/?category={{ product.category.slug }}">{{ product.category.name }}</a><span>›</span><span>{{ product.name|cut:"Ojasvirudraksha " }}</span></nav>
 <main id="main-content">
 <section class="detail-page">
   <div class="detail-photo"><img src="{{ product.image_url }}" alt="{{ product.name }}"></div>
   <div class="detail-copy">
-    <div class="small-brand">ASTROL · {{ product.category.name|upper }}</div>
-    <h1>{{ product.name|cut:"Astrol " }}</h1>
+    <div class="small-brand">OJASVIRUDRAKSHA · {{ product.category.name|upper }}</div>
+    <h1>{{ product.name|cut:"Ojasvirudraksha " }}</h1>
     {% if product.is_sample %}<p class="sample-notice"><strong>Sample product</strong><br>Illustrative image and price only. This product is not available to purchase.</p>{% endif %}
     <div class="detail-price">{% if product.is_sample %}<small>Sample price</small> {% endif %}<span id="variant-price">{% if product.price > 0 %}{% money product.price %}{% else %}Price unavailable{% endif %}</span></div>
     <p>{{ product.short_description }}</p>
@@ -23,7 +23,7 @@
       <button type="submit" class="detail-cart">Add to Cart</button>
     </form>
     {% else %}<button type="button" class="detail-cart" disabled>{% if product.is_sample %}Sample — not for sale{% else %}Currently unavailable{% endif %}</button>{% endif %}
-    <div class="delivery-box">Worldwide shipping · Thoughtfully selected by ASTROL</div>
+    <div class="delivery-box">Worldwide shipping · Thoughtfully selected by OJASVIRUDRAKSHA</div>
     <div class="product-description"><h2>About this product</h2>{% for section in product.description|description_sections %}<div class="description-section">{% if section.heading %}<h3>{{ section.heading }}</h3>{% endif %}{{ section.body|linebreaks }}</div>{% endfor %}</div>
   </div>
 </section>

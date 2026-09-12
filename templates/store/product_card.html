@@ -6,7 +6,7 @@
     <button class="heart" type="button" data-wishlist="{{ p.id }}" data-name="{{ p.name }}" aria-label="Save {{ p.name }} to wishlist" aria-pressed="false"><svg class="ui-icon" aria-hidden="true"><use href="#icon-heart"/></svg></button>
   </div>
   <div class="product-copy">
-    <a class="product-title" href="{{ p.get_absolute_url }}">{{ p.name|cut:"Astrol " }}</a>
+    <a class="product-title" href="{{ p.get_absolute_url }}">{{ p.name|cut:"Ojasvirudraksha " }}</a>
     <div class="product-meta">{% if p.origin %}{{ p.origin }} · {% endif %}{{ p.category.name }}</div>
     <div class="product-price">{% if p.is_sample %}<small>Sample price</small> {% elif p.has_options %}<small>From</small> {% endif %}{% if p.price > 0 %}{% money p.price %}{% else %}<small>Price unavailable</small>{% endif %}</div>
   </div>

@@ -22,13 +22,13 @@ RUD=[
 ]
 
 class Command(BaseCommand):
-    help="Seed the approved Astrol Rudraksha catalog"
+    help="Seed the approved Ojasvirudraksha Rudraksha catalog"
     def handle(self,*args,**kwargs):
         cats={}
         for name,slug,desc in CATS:
             cats[name],_=Category.objects.update_or_create(slug=slug,defaults={"name":name,"description":desc})
         for mukhi,origin,price in RUD:
-            name=f"Astrol {mukhi} Mukhi Rudraksha"
+            name=f"Ojasvirudraksha {mukhi} Mukhi Rudraksha"
             Product.objects.update_or_create(
                 slug=slugify(name),
                 defaults={
@@ -38,11 +38,11 @@ class Command(BaseCommand):
                     "size":"",
                     "price":price,
                     "image":f"images/exact/rudraksha-{mukhi}.jpg",
-                    "short_description":f"{mukhi} Mukhi Rudraksha in the approved Astrol catalog presentation.",
-                    "description":"Prototype product listing for the local Astrol storefront.",
+                    "short_description":f"{mukhi} Mukhi Rudraksha in the approved Ojasvirudraksha catalog presentation.",
+                    "description":"Prototype product listing for the local Ojasvirudraksha storefront.",
                     "featured":True,
                     "active":True,
                 }
             )
-        self.stdout.write(self.style.SUCCESS("Approved Astrol catalog seeded."))
+        self.stdout.write(self.style.SUCCESS("Approved Ojasvirudraksha catalog seeded."))
         call_command('update_product_descriptions', stdout=self.stdout)
