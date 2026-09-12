@@ -2,31 +2,22 @@
 
 This version rebuilds the local website to closely match the Astrol Rudraksha mockup approved in chat.
 
-## Apply to an existing installation
+## Run with Docker
 
-If you already ran the earlier version:
+Build and start the application:
 
 ```bash
-cd astrol_django
-chmod +x upgrade_exact_design.sh
-./upgrade_exact_design.sh
-python manage.py runserver
+docker-compose up -d --build
 ```
 
-Open:
-
-http://127.0.0.1:8000/
+Open http://127.0.0.1:8000/. Migrations and the repeatable catalog seed/import run
+automatically when the `web` container starts. View logs with
+`docker-compose logs -f web` and stop the application with `docker-compose down`.
 
 ## Fresh setup
 
 ```bash
-python3.12 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python manage.py makemigrations
-python manage.py migrate
-python manage.py seed_astrol
-python manage.py runserver
+docker-compose up -d --build
 ```
 
 The product-photo assets in `static/images/exact/` were extracted from the Astrol mockup approved by the project owner, so the local page visually matches that approved concept.
@@ -41,12 +32,11 @@ prices, options and availability. Product descriptions are concise ASTROL copy;
 source reviews, medical-benefit claims and policy text are not imported. One
 product photo per reference listing is stored locally in `static/images/catalog/`.
 
-After setting up the original catalog, install the expanded catalog with:
+The expanded catalog is imported automatically when the `web` container starts.
+To rerun it manually after editing catalog data, use:
 
 ```bash
-.venv/bin/python manage.py migrate
-.venv/bin/python manage.py import_reference_catalog
-.venv/bin/python manage.py runserver
+docker-compose exec web python manage.py import_reference_catalog
 ```
 
 The import adds 412 reference products and 645 variants, preserving the 14 original
@@ -60,9 +50,9 @@ The import is repeatable: existing source IDs and sample slugs are skipped, so i
 will not overwrite subsequent admin edits. Prices and availability are a snapshot,
 not a live inventory connection. Edit products, variants and sample flags through
 Django admin. To create a local administrator, run
-`.venv/bin/python manage.py createsuperuser`.
+`docker-compose exec web python manage.py createsuperuser`.
 
-Validation: `.venv/bin/python manage.py test store`.
+Validation: `docker-compose exec web python manage.py test store`.
 
 ## Customer and admin portals
 
@@ -73,7 +63,7 @@ Validation: `.venv/bin/python manage.py test store`.
 - Categories: `/admin/store/category/`
 
 The first local owner account can be created with
-`.venv/bin/python manage.py setup_local_admin`. This creates a random password and
+`docker-compose exec web python manage.py setup_local_admin`. This creates a random password and
 writes it to `.local/admin-access.txt` with owner-only file permissions. Existing
 superuser accounts are never overwritten. Change the generated password using the
 admin **Change password** link. The `.local/` folder is excluded from version control.
@@ -158,8 +148,8 @@ Descriptions cover product details, traditional use and care; sample specificati
 To populate missing or original placeholder descriptions after a fresh setup:
 
 ```sh
-python manage.py update_product_descriptions --dry-run
-python manage.py update_product_descriptions
+docker-compose exec web python manage.py update_product_descriptions --dry-run
+docker-compose exec web python manage.py update_product_descriptions
 ```
 
 The seed/import commands also apply these descriptions. Later merchant edits are preserved by
@@ -178,7 +168,7 @@ or INR if no cached USD rate exists. Cart totals sum rounded converted unit pric
 Fetch exchange rates after installation and schedule this command once daily:
 
 ```sh
-.venv/bin/python manage.py refresh_exchange_rates
+docker-compose exec web python manage.py refresh_exchange_rates
 ```
 
 Rates come from https://www.exchangerate-api.com/docs/free and are cached privately in
