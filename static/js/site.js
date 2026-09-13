@@ -161,3 +161,48 @@
   document.addEventListener('click', event => { if (!panel.contains(event.target)) panel.open = false; });
   panel.addEventListener('keydown', event => { if (event.key === 'Escape') { panel.open = false; panel.querySelector('summary').focus(); } });
 })();
+
+// Add in place so browsing position and selected options remain unchanged.
+(() => {
+  const feedback = document.querySelector('#cart-feedback');
+  if (!feedback || !window.fetch) return;
+  let queue = Promise.resolve();
+  let dismiss;
+  document.querySelectorAll('.card-cart-form, .detail-purchase').forEach(form => {
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const button = form.querySelector('button[type="submit"]');
+      if (button.disabled) return;
+      const body = new FormData(form);
+      const label = button.textContent;
+      button.disabled = true;
+      button.textContent = 'Adding…';
+      // Serialize additions so quick clicks on adjacent items keep guest carts intact.
+      queue = queue.then(async () => {
+        let message;
+        try {
+          const response = await fetch(form.action, {
+            method: 'POST', credentials: 'same-origin',
+            headers: {'Accept': 'application/json'}, body,
+          });
+          if (!response.headers.get('content-type')?.includes('application/json')) {
+            throw new Error('Could not confirm the addition. Check your cart before trying again.');
+          }
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || 'Unable to add this item. Please try again.');
+          document.querySelectorAll('.cart-action b').forEach(count => { count.textContent = data.cart_count; });
+          message = data.message;
+        } catch (error) {
+          message = error.message || 'Could not confirm the addition. Check your cart before trying again.';
+        } finally {
+          button.disabled = false;
+          button.textContent = label;
+        }
+        clearTimeout(dismiss);
+        feedback.querySelector('span').textContent = message;
+        feedback.hidden = false;
+        dismiss = setTimeout(() => { feedback.hidden = true; }, 7000);
+      });
+    });
+  });
+})();

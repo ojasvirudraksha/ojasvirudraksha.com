@@ -98,6 +98,28 @@ class FullCatalogTests(TestCase):
         client = Client(enforce_csrf_checks=True)
         self.assertEqual(client.post(f'/cart/add/{self.product.pk}/', {'variant': self.standard.pk}).status_code, 403)
 
+    def test_add_in_place_updates_cart_and_enforces_stock(self):
+        self.standard.stock_quantity = 1
+        self.standard.save()
+        url = f'/cart/add/{self.product.pk}/'
+        response = self.client.post(url, {'variant': self.standard.pk}, HTTP_ACCEPT='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['cart_count'], 1)
+        response = self.client.post(url, {'variant': self.standard.pk}, HTTP_ACCEPT='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('available quantity', response.json()['error'])
+        response = self.client.post(url, {'variant': self.silver.pk}, HTTP_ACCEPT='application/json')
+        self.assertEqual(response.json()['cart_count'], 2)
+        self.assertEqual(self.client.get('/cart/').context['total'], 2500)
+
+    def test_add_in_place_rejects_missing_and_unavailable_options(self):
+        url = f'/cart/add/{self.product.pk}/'
+        for data in ({}, {'variant': self.sold.pk}, {'variant': 'invalid'}):
+            response = self.client.post(url, data, HTTP_ACCEPT='application/json')
+            self.assertEqual(response.status_code, 400)
+            self.assertIn('error', response.json())
+        self.assertFalse(self.client.session.get('cart'))
+
     def test_sample_detail_and_availability_filter(self):
         response = self.client.get(self.sample.get_absolute_url())
         self.assertContains(response, 'Sample — not for sale')
