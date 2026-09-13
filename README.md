@@ -73,4 +73,16 @@ left intact; this setup starts a fresh MySQL database. Create a new admin accoun
 
 Docker stores the database, uploads and local settings in persistent volumes, separate from host files. Stopping the app preserves them; `docker-compose down -v` deletes them.
 
+Country selection converts displayed prices using exchange rates downloaded at web
+startup and saved in the persistent local settings volume. If a refresh fails,
+previous rates are retained. Without cached rates, prices fall back to INR.
+For an already running installation, fetch rates without restarting:
+
+```sh
+docker-compose exec -T web python manage.py refresh_exchange_rates
+```
+
+Schedule that command daily on the host to keep estimates current during long
+running deployments. Local installations can run `python manage.py refresh_exchange_rates`.
+
 This Docker setup is for local development.

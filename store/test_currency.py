@@ -1,5 +1,10 @@
 from decimal import Decimal
+import io
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest.mock import patch
+from django.core.management import call_command, CommandError
 from django.test import TestCase, Client, RequestFactory
 from store.currency import market, convert, format_money, validate_rates
 from store.models import Product, Category, ProductVariant
@@ -57,6 +62,19 @@ class CurrencyTests(TestCase):
         self.assertContains(self.client.get('/product/bead/'), '₹ 1,000.55')
 
 class RateValidationTests(TestCase):
+    def test_first_refresh_enables_country_conversion_and_failed_refresh_keeps_rates(self):
+        payload = {**RATES, 'result': 'success', 'base_code': 'INR'}
+        with TemporaryDirectory() as directory, patch('store.currency.rate_path', return_value=Path(directory) / 'exchange-rates.json'), patch('store.management.commands.refresh_exchange_rates.rate_path', return_value=Path(directory) / 'exchange-rates.json'):
+            request = lambda: RequestFactory().get('/', HTTP_COOKIE='ojasvirudraksha_country=US')
+            self.assertEqual(market(request())['currency'], 'INR')
+            with patch('store.management.commands.refresh_exchange_rates.urlopen', return_value=io.StringIO(json.dumps(payload))):
+                call_command('refresh_exchange_rates', stdout=io.StringIO())
+            self.assertEqual(format_money(1000, market(request())), 'USD 12.00')
+            with patch('store.management.commands.refresh_exchange_rates.urlopen', side_effect=OSError('Provider unavailable')):
+                with self.assertRaises(CommandError):
+                    call_command('refresh_exchange_rates', stdout=io.StringIO())
+            self.assertEqual(format_money(1000, market(request())), 'USD 12.00')
+
     def test_invalid_download_rejected(self):
         for value in ('NaN', '-1', '0', 'Infinity'):
             with self.assertRaises(ValueError):
