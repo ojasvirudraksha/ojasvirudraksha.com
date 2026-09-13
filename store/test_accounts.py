@@ -173,3 +173,56 @@ class CustomerAccountTests(TestCase):
         for url in ['/admin/store/customerprofile/', f'/admin/store/customerprofile/{profile.pk}/change/', '/admin/store/customeraddress/', '/admin/store/wishlistitem/']:
             self.assertEqual(self.client.get(url).status_code, 200, url)
         self.assertContains(self.client.get('/admin/store/customerprofile/'), self.user.email)
+
+
+@override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+class AdminPasswordResetTests(TestCase):
+    def setUp(self):
+        self.staff = get_user_model().objects.create_user(
+            username='store-admin', email='admin@example.com', password='Cedar!Meadow8742', is_staff=True)
+
+    def test_admin_branding_and_reset_link(self):
+        response = self.client.get('/admin/login/')
+        self.assertContains(response, 'images/ojasvi-brand-original.png')
+        self.assertContains(response, 'Welcome back.')
+        self.assertContains(response, '/admin/password-reset/')
+
+    def test_staff_can_reset_password_and_login_and_token_is_single_use(self):
+        self.assertRedirects(self.client.post('/admin/password-reset/', {'email': self.staff.email}), '/admin/password-reset/sent/')
+        self.assertEqual(len(mail.outbox), 1)
+        url = re.search(r'http://testserver(/admin/password-reset/[^\s]+)', mail.outbox[0].body).group(1)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        password = 'Willow!Forest8432'
+        self.assertRedirects(self.client.post(response.url, {'new_password1': password, 'new_password2': password}), '/admin/password-reset/complete/')
+        self.staff.refresh_from_db()
+        self.assertTrue(self.staff.check_password(password))
+        self.assertContains(self.client.get(url, follow=True), 'This link has expired')
+        self.assertRedirects(self.client.post('/admin/login/', {'username': self.staff.username, 'password': password, 'next': '/admin/'}), '/admin/')
+
+    def test_nonstaff_unknown_and_inactive_emails_do_not_send(self):
+        get_user_model().objects.create_user(username='customer', email='customer@example.com', password='Cedar!Meadow8742')
+        self.staff.is_active = False
+        self.staff.save()
+        for email in ('unknown@example.com', 'customer@example.com', self.staff.email):
+            self.assertRedirects(self.client.post('/admin/password-reset/', {'email': email}), '/admin/password-reset/sent/')
+        self.assertEqual(len(mail.outbox), 0)
+
+
+class SignupPhoneTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.data = {'first_name': 'Asha', 'email': 'asha@example.com',
+                     'password1': 'Cedar!Meadow8742', 'password2': 'Cedar!Meadow8742'}
+
+    def test_phone_field_and_profile_storage(self):
+        self.assertContains(self.client.get('/account/register/'), 'type="tel"')
+        self.assertRedirects(self.client.post('/account/register/', {**self.data, 'phone': '+91 9876543210'}), '/account/')
+        self.assertEqual(CustomerProfile.objects.get(user__email='asha@example.com').phone, '+91 9876543210')
+        self.assertContains(self.client.get('/account/profile/'), '+91 9876543210')
+
+    def test_invalid_phone_rejected(self):
+        for phone in ('abc123', '123', '+1234567890123456'):
+            response = self.client.post('/account/register/', {**self.data, 'phone': phone})
+            self.assertIn('phone', response.context['form'].errors)
+        self.assertFalse(get_user_model().objects.filter(email='asha@example.com').exists())

@@ -44,6 +44,32 @@ docker-compose exec web python manage.py createsuperuser
 
 Sign in at http://127.0.0.1:8000/admin/ to manage products, inventory, customers and site content. Use the port set in `.env`.
 
+## Password reset emails
+
+Both customer and admin sign-in pages offer password reset by email. Admin resets
+require an active staff account with an email address saved under Admin → Users.
+Customer signup accepts an optional phone number, saved in the customer profile;
+password reset continues to use email.
+
+The default email backend writes messages to `.local/emails` for local development.
+It does **not** deliver them to an inbox. To enable delivery, configure your SMTP
+provider in the server's private `.env`:
+
+```dotenv
+DJANGO_EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.your-provider.example
+EMAIL_PORT=587
+EMAIL_HOST_USER=your-sending-account
+EMAIL_HOST_PASSWORD=your-provider-app-password
+EMAIL_USE_TLS=true
+DEFAULT_FROM_EMAIL=Ojasvi Rudraksha <your-verified-sender@example.com>
+```
+
+Use your provider's actual settings and a verified sender. Recreate the container
+after changing `.env`: `docker-compose up -d --no-deps --force-recreate web`.
+Request resets from the public HTTPS site when testing delivery so the emailed
+links point to the correct domain. Reset links expire and stop working after use.
+
 Run `docker-compose up --build -d` again after changing code or `.env`.
 Startup also updates existing catalog and information-page branding, preserving
 product IDs, carts and wishlists. Existing product links redirect to the renamed URLs.

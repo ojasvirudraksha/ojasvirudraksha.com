@@ -1,7 +1,7 @@
 import re
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm
 from django.db.models import Q
 from .models import CustomerAddress, CustomerProfile
 
@@ -17,10 +17,16 @@ class CustomerSignupForm(UserCreationForm):
     first_name = forms.CharField(label='First name', max_length=150, widget=forms.TextInput(attrs={'autocomplete': 'given-name'}))
     last_name = forms.CharField(label='Last name', max_length=150, required=False, widget=forms.TextInput(attrs={'autocomplete': 'family-name'}))
     email = forms.EmailField(max_length=150, widget=forms.EmailInput(attrs={'autocomplete': 'email'}))
+    phone = forms.CharField(label='Phone number', max_length=25, required=False,
+                           help_text='Optional. Include your country code, for example +91.',
+                           widget=forms.TextInput(attrs={'autocomplete': 'tel', 'type': 'tel'}))
 
     class Meta:
         model = get_user_model()
-        fields = ('first_name', 'last_name', 'email', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'email', 'phone', 'password1', 'password2')
+
+    def clean_phone(self):
+        return clean_phone(self.cleaned_data['phone'])
 
     def clean_email(self):
         email = self.cleaned_data['email'].strip().lower()
@@ -36,8 +42,13 @@ class CustomerSignupForm(UserCreationForm):
         user.is_superuser = False
         if commit:
             user.save()
-            CustomerProfile.objects.get_or_create(user=user)
+            CustomerProfile.objects.update_or_create(user=user, defaults={'phone': self.cleaned_data['phone']})
         return user
+
+
+class AdminPasswordResetForm(PasswordResetForm):
+    def get_users(self, email):
+        return (user for user in super().get_users(email) if user.is_staff)
 
 
 class CustomerLoginForm(AuthenticationForm):

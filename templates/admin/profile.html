@@ -1,0 +1,25 @@
+{% extends 'admin/base_site.html' %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Home</a> &rsaquo; My profile</div>{% endblock %}
+{% block content %}
+<section class="inventory-welcome"><p class="admin-eyebrow">YOUR ADMIN ACCOUNT</p><h2>{{ profile_user.get_full_name|default:profile_user.username }}</h2><p>Keep your contact details up to date and review your access to the store.</p></section>
+<div class="admin-profile-grid">
+<section class="admin-profile-card"><h2>Personal details</h2>
+<form method="post" class="admin-profile-form">{% csrf_token %}{{ form.non_field_errors }}
+{% for field in form %}<div class="form-row">{{ field.errors }}{{ field.label_tag }}{{ field }}{% if field.help_text %}<p class="help" id="{{ field.auto_id }}_helptext">{{ field.help_text }}</p>{% endif %}</div>{% endfor %}
+<div class="submit-row"><input type="submit" class="default" value="Save profile"></div>
+</form></section>
+<section class="admin-profile-card"><h2>Account &amp; security</h2><dl class="admin-profile-facts">
+<dt>Sign-in username</dt><dd>{{ profile_user.username }}</dd>
+<dt>Role</dt><dd>{% if profile_user.is_superuser %}Super administrator · Full access{% else %}Staff · Assigned permissions{% endif %}</dd>
+<dt>Account status</dt><dd>{% if profile_user.is_active %}Active{% else %}Inactive{% endif %}</dd>
+<dt>Member since</dt><dd>{{ profile_user.date_joined|date:'j M Y' }}</dd>
+<dt>Last sign-in</dt><dd>{{ profile_user.last_login|date:'j M Y, P'|default:'Not recorded' }}</dd>
+<dt>Groups</dt><dd>{% for group in groups %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% empty %}No groups assigned{% endfor %}</dd>
+</dl><a class="admin-profile-password" href="{% url 'admin:password_change' %}">Change password →</a></section>
+<section class="admin-profile-card admin-profile-access"><h2>Your access</h2>
+{% if profile_user.is_superuser %}<p>You have full access to all admin features, including products, inventory, customers, store content, users, groups and permissions.</p>
+{% else %}<p>Your access includes permissions assigned directly to you and through your groups. An administrator manages these permissions.</p>
+{% regroup profile_permissions by content_type.app_label as permission_apps %}
+{% for app in permission_apps %}<h3>{{ app.grouper|capfirst }}</h3><ul class="admin-permission-list">{% for permission in app.list %}<li>{{ permission.name }}</li>{% endfor %}</ul>{% empty %}<p>No permissions are assigned yet. Ask a super administrator for the access you need.</p>{% endfor %}{% endif %}
+</section></div>
+{% endblock %}

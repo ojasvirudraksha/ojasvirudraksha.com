@@ -102,6 +102,14 @@ class ProductVariant(models.Model):
         return f"{self.product.name} — {self.name}"
 
 
+class StaffProfile(models.Model):
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='staff_profile')
+    phone = models.CharField(max_length=25, blank=True)
+
+    def __str__(self):
+        return self.user.get_full_name() or self.user.username
+
+
 class CustomerProfile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='customer_profile')
     phone = models.CharField(max_length=25, blank=True)
