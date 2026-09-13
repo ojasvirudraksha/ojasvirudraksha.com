@@ -5,7 +5,7 @@ import re
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import HttpResponseBadRequest, QueryDict
+from django.http import HttpResponseBadRequest, JsonResponse, QueryDict
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
@@ -146,31 +146,43 @@ def product_detail(request, slug):
 @require_POST
 @persistent_cart
 def add_to_cart(request, product_id):
+    wants_json = request.headers.get('Accept') == 'application/json'
+
+    def invalid(message):
+        return JsonResponse({'error': message}, status=400) if wants_json else HttpResponseBadRequest(message)
+
     product = get_object_or_404(Product.objects.prefetch_related("variants"), id=product_id, active=True)
     if not product.can_purchase:
-        return HttpResponseBadRequest("This product is not available to purchase.")
+        return invalid("This product is not available to purchase.")
     variants = list(product.variants.all())
     variant_id = request.POST.get("variant")
     variant = None
     if variant_id:
         variant = next((v for v in variants if str(v.pk) == variant_id), None)
         if variant is None:
-            return HttpResponseBadRequest("Please choose a valid product option.")
+            return invalid("Please choose a valid product option.")
     elif len(variants) == 1:
         variant = variants[0]
     elif len(variants) > 1:
+        if wants_json:
+            return invalid("Please choose a product option before adding to cart.")
         return redirect(product.get_absolute_url())
     if variant and not variant.can_purchase:
-        return HttpResponseBadRequest("This option is not available to purchase.")
+        return invalid("This option is not available to purchase.")
     cart = request.session.get("cart", {})
     key = f"{product.pk}:{variant.pk}" if variant else str(product.pk)
     next_quantity = cart.get(key, 0) + 1
     stock = variant.stock_quantity if variant else product.stock_quantity
     if stock is not None and next_quantity > stock:
+        if wants_json:
+            return invalid("Your cart already contains the available quantity for this item.")
         messages.error(request, "Your cart already contains the available quantity for this item.")
         return redirect(product.get_absolute_url())
     cart[key] = next_quantity
     request.session["cart"] = cart
+    if wants_json:
+        return JsonResponse({'message': f"{product.name} added to your cart.",
+                             'cart_count': sum(qty for qty in cart.values() if isinstance(qty, int) and qty > 0)})
     messages.success(request, f"{product.name} added to your cart.", extra_tags="cart")
     next_url = request.POST.get("next") or request.META.get("HTTP_REFERER", "")
     if not url_has_allowed_host_and_scheme(next_url, {request.get_host()}, require_https=request.is_secure()):
