@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="{% static 'css/om-background.css' %}?v=2">
 <link rel="stylesheet" href="{% static 'css/brand.css' %}?v=3">
 <link rel="stylesheet" href="{% static 'css/search-suggestions.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'css/navigation.css' %}?v=3">
 </head>
 <body data-customer-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -48,7 +49,7 @@
   </div>
 </header>
 
-<nav class="main-nav" aria-label="Main navigation"><a href="/" {% if selected == 'home' %}class="active" aria-current="page"{% endif %}>Home</a><a href="/shop/" {% if selected == 'all' %}class="active"{% endif %}>All products</a>{% for category in nav_categories %}<a href="/shop/?category={{ category.slug }}" {% if selected == category.slug %}class="active"{% endif %}>{{ category.name }}</a>{% endfor %}</nav>
+{% include 'store/main_navigation.html' %}
 {% endblock %}
 
 {% if messages %}<div class="store-messages" role="status">{% for message in messages %}<p>{{ message }}{% if 'cart' in message.tags %} <a href="/cart/">View cart →</a>{% endif %}</p>{% endfor %}</div>{% endif %}
@@ -78,5 +79,6 @@
 <div id="cart-feedback" role="status" aria-live="polite" hidden style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:1000;background:#fffaf2;color:#5e4129;padding:14px 20px;border:1px solid #d6c4ac;border-radius:8px;box-shadow:0 4px 20px #0002;max-width:calc(100% - 32px);width:max-content;box-sizing:border-box"><span></span> <a href="/cart/">View cart →</a></div>
 <script src="{% static 'js/site.js' %}?v=ojasvirudraksha-2" defer></script>
 <script src="{% static 'js/search-suggestions.js' %}?v=1" defer></script>
+<script src="{% static 'js/navigation.js' %}?v=2" defer></script>
 </body>
 </html>

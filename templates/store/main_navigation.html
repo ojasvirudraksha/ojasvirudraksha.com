@@ -1,0 +1,16 @@
+<nav class="main-nav collection-nav" aria-label="Main navigation">
+  <details class="nav-disclosure {% if selected == 'home' %}is-current{% endif %}">
+    <summary>Home <span aria-hidden="true">⌄</span></summary>
+    <div class="nav-dropdown"><p class="nav-kicker">WELCOME TO OJASVI RUDRAKSHA</p><h2>A little closer to the sacred.</h2><a href="/" {% if selected == 'home' %}aria-current="page"{% endif %}>Visit our home <span aria-hidden="true">→</span></a><a href="/shop/">Explore the collection</a><a href="{% url 'contact_us' %}">Need guidance? Contact us</a></div>
+  </details>
+  <details class="nav-disclosure {% if selected == 'all' %}is-current{% endif %}">
+    <summary>All products <span aria-hidden="true">⌄</span></summary>
+    <div class="nav-dropdown"><p class="nav-kicker">FIND YOUR NEXT FAVOURITE</p><h2>Explore every collection</h2><a href="/shop/" {% if selected == 'all' %}aria-current="page"{% endif %}>Shop all products <span aria-hidden="true">→</span></a><a href="/shop/?availability=available">Available to shop</a><a href="/shop/?sort=price-asc">Browse by price</a><p class="nav-kicker nav-section-label">SHOP BY COLLECTION</p><div class="nav-category-links">{% for category in nav_categories %}<a href="/shop/?category={{ category.slug }}">{{ category.name }}</a>{% endfor %}</div></div>
+  </details>
+  {% for category in nav_categories %}
+  <details class="nav-disclosure {% if selected == category.slug %}is-current{% endif %}">
+    <summary>{{ category.name }} <span aria-hidden="true">⌄</span></summary>
+    <div class="nav-dropdown"><p class="nav-kicker">EXPLORE THE COLLECTION</p><h2>{{ category.name }}</h2><a href="/shop/?category={{ category.slug }}" {% if selected == category.slug %}aria-current="page"{% endif %}>Shop all {{ category.name }} <span aria-hidden="true">→</span></a><a href="/shop/?category={{ category.slug }}&amp;availability=available">Available to shop</a><a href="/shop/?category={{ category.slug }}&amp;sort=price-asc">Price: low to high</a>{% if category.slug == 'rudraksha' %}<p class="nav-kicker nav-section-label">EXPLORE BY MUKHI</p><div class="nav-category-links"><a href="/shop/?category=rudraksha&amp;mukhi=5">5 Mukhi</a><a href="/shop/?category=rudraksha&amp;mukhi=7">7 Mukhi</a><a href="/shop/?category=rudraksha&amp;mukhi=14">14 Mukhi</a></div>{% endif %}<a class="nav-guidance" href="{% url 'contact_us' %}">Help me choose <span aria-hidden="true">↗</span></a></div>
+  </details>
+  {% endfor %}
+</nav>
