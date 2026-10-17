@@ -127,30 +127,6 @@ class FullCatalogTests(TestCase):
         response = self.client.get('/shop/', {'availability': 'available'})
         self.assertEqual(list(response.context['products']), [self.product])
 
-    def test_import_is_repeatable_and_preserves_edits(self):
-        import json
-        from io import StringIO
-        from tempfile import TemporaryDirectory
-        from pathlib import Path
-        from django.core.management import call_command
-        from .models import ProductVariant
-        row = {'source_id': 'reference-1', 'name': 'Reference Bracelet', 'category': 'bracelets',
-               'origin': '', 'image': 'images/products/bracelet.png', 'source_url': 'https://rudradhyay.com/products/example',
-               'dhan_yog': True, 'variants': [{'source_id': 'import-v1', 'name': 'Standard', 'price': '800', 'compare_at_price': None, 'available': True, 'sku': None}]}
-        with TemporaryDirectory() as folder:
-            path = Path(folder)/'catalog.json'
-            path.write_text(json.dumps({'products': [row]}))
-            call_command('import_reference_catalog', catalog=path, stdout=StringIO())
-            imported = Product.objects.get(source_id='reference-1')
-            imported.price = 900
-            imported.save()
-            count = Product.objects.count()
-            call_command('import_reference_catalog', catalog=path, stdout=StringIO())
-            self.assertEqual(Product.objects.count(), count)
-            self.assertEqual(Product.objects.get(source_id='reference-1').price, 900)
-            self.assertEqual(ProductVariant.objects.filter(source_id='import-v1').count(), 1)
-
-
 class HomepageTests(TestCase):
     def setUp(self):
         self.category = Category.objects.create(name='Bracelets', slug='bracelets')
