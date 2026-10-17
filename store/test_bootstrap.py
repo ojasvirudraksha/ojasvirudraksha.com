@@ -14,7 +14,7 @@ class BootstrapTests(TestCase):
         product.refresh_from_db()
         self.assertEqual(product.price, 99)
 
-    def test_empty_catalog_seeds_both_sources(self):
+    def test_empty_catalog_seeds_the_approved_catalog(self):
         with patch('store.management.commands.bootstrap_catalog.call_command') as seed:
             call_command('bootstrap_catalog', stdout=StringIO())
-            self.assertEqual([c.args[0] for c in seed.call_args_list], ['seed_ojasvirudraksha', 'import_reference_catalog'])
+            self.assertEqual([c.args[0] for c in seed.call_args_list], ['seed_ojasvirudraksha'])
