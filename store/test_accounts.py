@@ -52,12 +52,13 @@ class CustomerAccountTests(TestCase):
         self.assertIn('Use the admin portal for staff accounts.', response.context['form'].non_field_errors())
         self.assertNotIn('_auth_user_id', self.client.session)
 
-    def test_staff_session_is_rejected_by_customer_routes(self):
+    def test_staff_session_can_browse_storefront_but_not_customer_account(self):
         staff_user = get_user_model().objects.create_user(username='staff-only@example.com', email='staff-only@example.com', password=self.password, is_staff=True, is_superuser=False)
         self.client.force_login(staff_user)
+        self.assertEqual(self.client.get('/').status_code, 200)
         response = self.client.get('/account/', follow=True)
-        self.assertRedirects(response, '/account/login/')
-        self.assertNotIn('_auth_user_id', self.client.session)
+        self.assertRedirects(response, '/admin/')
+        self.assertIn('_auth_user_id', self.client.session)
 
     def test_login_throttles_repeated_failures(self):
         for _ in range(10):
